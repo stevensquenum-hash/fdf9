@@ -361,7 +361,7 @@ function playReadyAlert(){
 
 function initFirebase() {
   try {
-    firebase.initializeApp(FB_CONFIG);
+    if (!firebase.apps.length) { firebase.initializeApp(FB_CONFIG); }
     db = firebase.firestore();
     // Écoute les changements en temps réel
     db.collection('evenement').doc('data').onSnapshot(snap => {
@@ -624,8 +624,8 @@ function goGuest(g) {
 
 // ─── ONGLETS ──────────────────────────────────────────────────────────────────
 function goTab(name) {
-  ['menu','boissons','extras'].forEach(p => {
-    document.getElementById('pane-' + p).style.display = p === name ? '' : 'none';
+  ['menu','enfant','boissons','extras'].forEach(p => {
+    if(document.getElementById('pane-' + p)) document.getElementById('pane-' + p).style.display = p === name ? '' : 'none';
     document.getElementById('tab-' + p).classList.toggle('active', p === name);
   });
 }
@@ -781,7 +781,7 @@ function applyUI() {
   setOpt('p-plantain','ck-plantain',(sel.acc.plantain || 0) > 0);
 
   const c = sel.child || {acc:{}};
-  [['e-viande','eck-viande',c.plat==='viande'],['ci-viande','cick-viande',c.plat==='viande'],['ci-riz','cick-riz',c.acc?.riz],['ci-igname','cick-igname',c.acc?.igname],['ci-plantain','cick-plantain',c.acc?.plantain],['ci-degue','cick-degue',c.dessert==='degue'],['ci-m1','cick-m1',c.mock==='mocktail1'],['ci-m2','cick-m2',c.mock==='mocktail2'],,['e-riz','eck-riz',c.acc?.riz],['e-igname','eck-igname',c.acc?.igname],['e-plantain','eck-plantain',c.acc?.plantain],['e-degue','eck-degue',c.dessert==='degue'],['e-m1','eck-m1',c.mock==='mocktail1'],['e-m2','eck-m2',c.mock==='mocktail2']].forEach(x=>setOpt(x[0],x[1],!!x[2]));
+  [['e-viande','eck-viande',c.plat==='viande'],['ci-viande','cick-viande',c.plat==='viande'],['ci-riz','cick-riz',c.acc?.riz],['ci-igname','cick-igname',c.acc?.igname],['ci-plantain','cick-plantain',c.acc?.plantain],['ci-degue','cick-degue',c.dessert==='degue'],['ci-m1','cick-m1',c.mock==='mocktail1'],['ci-m2','cick-m2',c.mock==='mocktail2'],['e-riz','eck-riz',c.acc?.riz],['e-igname','eck-igname',c.acc?.igname],['e-plantain','eck-plantain',c.acc?.plantain],['e-degue','eck-degue',c.dessert==='degue'],['e-m1','eck-m1',c.mock==='mocktail1'],['e-m2','eck-m2',c.mock==='mocktail2']].forEach(x=>setOpt(x[0],x[1],!!x[2]));
 
 }
 
