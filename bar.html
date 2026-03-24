@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar — Coordination</title>
+<style>
+:root{--bg:#fff;--bg2:#f5f5f4;--text:#1a1a1a;--border:rgba(0,0,0,.12);--blue:#185FA5;--green:#1D9E75;--amber:#BA7517;--r:10px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#eceae6;color:var(--text);margin:0;padding:.75rem}
+.app{max-width:520px;margin:auto}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-bottom:1rem}
+.ticket{border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.ticket-h{padding:10px 12px;background:var(--bg2);font-weight:600;display:flex;justify-content:space-between}
+.ticket-b{padding:10px 12px}
+.badge{font-size:11px;padding:3px 8px;border-radius:99px;background:#E1F5EE;color:#085041}
+.empty{text-align:center;padding:2rem;color:#6b6b6b}
+.btn{padding:8px 14px;border:none;border-radius:8px;background:var(--blue);color:#fff;font-weight:600;cursor:pointer}
+.row{padding:6px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+    <h2>🍹 Bar — Préparation uniquement</h2>
+    <div id="bar-list"><div class="empty">Connexion…</div></div>
+  <div class="card"><h2>Historique boissons prêtes</h2><div id="bar-history"><div class="empty">Aucune boisson prête</div></div></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const FB_CONFIG = {
+  apiKey: "AIzaSyBg6vVAIBrmmx23BogWnRx3ZW7BMeSqu7w",
+  authDomain: "commandes-25avril.firebaseapp.com",
+  projectId: "commandes-25avril",
+  storageBucket: "commandes-25avril.firebasestorage.app",
+  messagingSenderId: "359129430877",
+  appId: "1:359129430877:web:d60ac1a3e6dfc7596746b4"
+};
+firebase.initializeApp(FB_CONFIG);
+const db = firebase.firestore();
+
+function drinkLabel(id){
+  return {
+    bissape:'Bissap',
+    gingembre:'Jus de gingembre',
+    mocktail1:'Soleil de Dakar (sirop de bissap, jus d’ananas)',
+    mocktail2:'Soleil épicé (sirop de gingembre, jus d’ananas)',
+    cocktail1:'Bissap Rum Fresh (sirop de bissap, rhum, jus de citron vert)',
+    cocktail2:'Gold District (sirop de gingembre, vodka)'
+  }[id] || id;
+}
+
+function render(data){
+  let html='';
+  let hist='';
+  const orders = data.orders || {};
+  Object.keys(orders).sort((a,b)=>a-b).forEach(t=>{
+    Object.keys(orders[t]||{}).sort((a,b)=>a-b).forEach(g=>{
+      const guest=orders[t][g];
+      Object.keys(guest).sort().forEach(rk=>{
+        const o=guest[rk];
+        const drinks = Object.entries(o.dr||{}).filter(([k,v])=>v>0);
+        // Ajouter le mocktail enfant si présent
+        const childMock = (o.child && o.child.mock) ? o.child.mock : null;
+        if(childMock) drinks.push([childMock, 1]);
+
+        if(!drinks.length) return; // rien à afficher côté bar
+
+        if(o.barStatus==='ready'){
+          // Déjà prêt → historique
+          hist += '<div class="ticket" style="opacity:.5">' +
+            '<div class="ticket-h">Table '+t+' · Convive '+g+' <span class="badge">✓ prêt</span></div>' +
+            '<div class="ticket-b">' +
+            drinks.map(([k,v])=>drinkLabel(k)+' × '+v).join('<br>') +
+            '</div></div>';
+        } else {
+          // En attente → file bar
+          html += '<div class="ticket">' +
+            '<div class="ticket-h">Table '+t+' · Convive '+g+' <span class="badge">'+rk.toUpperCase()+'</span></div>' +
+            '<div class="ticket-b">';
+          drinks.forEach(([k,v])=>{
+            html += '<div class="row">' + drinkLabel(k) + ' × ' + v + '</div>';
+          });
+          html += '<div style="margin-top:8px"><button class="btn" onclick="markReady('+t+','+g+',\''+rk+'\')">Prêt</button></div>' +
+            '</div></div>';
+        }
+      });
+    });
+  });
+  document.getElementById('bar-list').innerHTML = html || '<div class="empty">Aucune commande boisson</div>';
+  document.getElementById('bar-history').innerHTML = hist || '<div class="empty">Aucune boisson prête</div>';
+}
+
+function markReady(t,g,rk){
+  // Mise à jour atomique : lecture → modification → écriture
+  db.collection('evenement').doc('data').get().then(snap=>{
+    if(!snap.exists) return;
+    const d = snap.data();
+    const tKey = String(t), gKey = String(g);
+    if(d.orders && d.orders[tKey] && d.orders[tKey][gKey] && d.orders[tKey][gKey][rk]){
+      d.orders[tKey][gKey][rk].barStatus = 'ready';
+    } else if(d.orders && d.orders[t] && d.orders[t][g] && d.orders[t][g][rk]){
+      d.orders[t][g][rk].barStatus = 'ready';
+    }
+    return db.collection('evenement').doc('data').set(d);
+  }).catch(e => console.warn('markReady error:', e));
+}
+
+db.collection('evenement').doc('data').onSnapshot(snap=>{
+  if(snap.exists) render(snap.data());
+});
+</script>
+</body>
+</html>
