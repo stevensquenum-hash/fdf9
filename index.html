@@ -43,7 +43,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tbtn .dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--green)}
 .card{background:var(--bg);border:1px solid var(--border);border-radius:var(--rl);padding:1rem;margin-bottom:.875rem}
 .ctitle{font-size:14px;font-weight:600;margin-bottom:12px}
-.rtw{display:flex;justify-content:center;margin-bottom:12px}
+.rtw{display:flex;justify-content:center;align-items:center;min-height:220px;margin-bottom:12px}
 .slbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:12px;font-weight:600}
 .opt{display:flex;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:14px;color:var(--text);background:var(--bg);margin-bottom:5px;min-height:46px;transition:background .1s,border-color .1s}
 .opt.sel{background:var(--bl);border-color:var(--blue);color:var(--bld)}
@@ -144,7 +144,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="card">
     <div class="ctitle" id="left-title">Table 1 — sélectionnez un convive</div>
     <div class="rtw">
-      <svg id="round-svg" width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg id="round-svg" width="200" height="200" viewBox="0 0 200 200" style="overflow:visible" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <div class="tabs">
       <button class="tab active" id="tab-menu"     onclick="goTab('menu')">Menu inclus</button>
