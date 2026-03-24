@@ -420,7 +420,7 @@ function togSoftIncluded(id) {
 
 function calcTotal(o, g) {
   let tot = 0;
-  if (o.child && o.child.plat && o.child.dessert && o.child.mock) return 15;
+  if (o.child && o.child.plat && o.child.dessert && o.child.mock) tot += 15;
   const rnd = o.rnd || 1;
 
   if (rnd === 1) {
@@ -499,6 +499,8 @@ function goTable(t) {
 // ─── TABLE RONDE SVG ──────────────────────────────────────────────────────────
 function drawSVG() {
   const svg = document.getElementById('round-svg');
+  if (!orders[curT]) orders[curT] = {};
+  if (!svg) return;
   svg.innerHTML = '';
   const cx = 100, cy = 100, R = 80, r = 17;
   const dk = window.matchMedia('(prefers-color-scheme:dark)').matches;
@@ -805,7 +807,7 @@ function saveOrder() {
     dr:      Object.assign({}, sel.dr),
     ex:      Object.assign({}, sel.ex),
     rnd:     sel.rnd,
-    child:   sel.child || null,
+    child:   (sel.child && (sel.child.plat||sel.child.dessert||sel.child.mock)) ? sel.child : null,
     paid:    false,
     served:  false
   };
