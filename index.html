@@ -225,7 +225,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="slbl">Autres extras</div>             <div id="oth-extra-list"></div>
     </div>
     
-    <div id="child-inline" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+    <div id="child-inline" style="display:none !important;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
       <div class="slbl">Menu enfant attaché — 15€</div>
       <div class="opt" id="ci-viande" onclick="togChild('plat','viande')"><span class="ck" id="cick-viande"></span><span style="flex:1">Portion de viandes</span></div>
       <div class="opt" id="ci-riz" onclick="togChildAcc('riz')"><span class="ck" id="cick-riz"></span><span style="flex:1">Riz pilaf</span></div>
@@ -748,8 +748,7 @@ function togChildMock(id){
 
 
 function toggleChildMenu(){
-  const el = document.getElementById('child-inline');
-  if(el) el.style.display = el.style.display==='none' ? 'block' : 'none';
+  goTab('enfant');
 }
 
 // ─── UI ───────────────────────────────────────────────────────────────────────
