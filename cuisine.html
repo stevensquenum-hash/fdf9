@@ -266,20 +266,6 @@ function buildTables() {
 }
 
 // ─── RENDU ────────────────────────────────────────────────────────────────────
-function hasKitchenItems(o) {
-  if (o.plat==='viande') return true;
-  if (ACC.some(i => (o.acc||{})[i.id] > 0)) return true;
-  if (o.dessert==='degue') return true;
-  if (ALL_EX.some(i => (o.ex||{})[i.id] > 0)) return true;
-  if (o.child) {
-    const c = o.child;
-    if (c.plat==='viande') return true;
-    if (['riz','igname','plantain'].some(id => c.acc && c.acc[id])) return true;
-    if (c.dessert==='degue') return true;
-  }
-  return false;
-}
-
 function renderKitchenItems(o) {
   let html = '';
   if (o.plat==='viande') html += '<div class="pline"><span class="emoji">🥩</span><span>Assortiment viandes</span></div>';
@@ -304,7 +290,7 @@ function renderKitchenItems(o) {
       if (c.acc && c.acc[id]) html += '<div class="pline" style="padding-left:16px"><span class="emoji">'+accIcons[id]+'</span><span>'+accLabels[id]+'</span></div>';
     });
     if (c.dessert==='degue') html += '<div class="pline" style="padding-left:16px"><span class="emoji">🥣</span><span>Dégué</span></div>';
-    // Mocktail enfant → Bar uniquement, pas en cuisine
+    if (c.mock && mockLabels[c.mock]) html += '<div class="pline" style="padding-left:16px"><span class="emoji">🧃</span><span>'+mockLabels[c.mock]+'</span></div>';
   }
   if (!html) html = '<div style="font-size:13px;color:var(--text2);padding:6px 0">Boissons uniquement</div>';
   return html;
@@ -319,7 +305,6 @@ function renderTicketsForTable(t) {
     const rks = Object.keys(gO).sort();
     rks.forEach(rk => {
       const o = gO[rk];
-      if (!hasKitchenItems(o)) return; // Boissons uniquement → Bar, pas cuisine
       const ks = o.served ? 'served' : (o.kitchenStatus||'new');
       const rNum = rks.length>1?' Svc '+rk.replace('r',''):'';
       const label = 'T'+t+' · C'+g+rNum;

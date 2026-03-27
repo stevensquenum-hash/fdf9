@@ -195,22 +195,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
       <div class="lockmsg" id="lock-msg">✓ Menu complet — passez aux boissons / extras</div>
     </div>
-    
-      <div class="opt" id="e-viande" onclick="togChild('plat','viande')">
-        <span class="ck" id="eck-viande"></span>
-        <span style="flex:1">Portion de viandes</span>
-        <span class="ftag">inclus</span>
-      </div>
-      <div class="slbl">1 accompagnement</div>
-      <div class="opt" id="e-riz" onclick="togChildAcc('riz')"><span class="ck" id="eck-riz"></span><span style="flex:1">Riz pilaf</span></div>
-      <div class="opt" id="e-igname" onclick="togChildAcc('igname')"><span class="ck" id="eck-igname"></span><span style="flex:1">Frites d'ignames</span></div>
-      <div class="opt" id="e-plantain" onclick="togChildAcc('plantain')"><span class="ck" id="eck-plantain"></span><span style="flex:1">Banane plantain</span></div>
-      <div class="slbl">Dessert</div>
-      <div class="opt" id="e-degue" onclick="togChild('dessert','degue')"><span class="ck" id="eck-degue"></span><span style="flex:1">Dégué</span></div>
-      <div class="slbl">1 mocktail</div>
-      <div class="opt" id="e-m1" onclick="togChildMock('mocktail1')"><span class="ck" id="eck-m1"></span><span style="flex:1">Soleil de Dakar (sirop de bissap, jus d'ananas)</span></div>
-      <div class="opt" id="e-m2" onclick="togChildMock('mocktail2')"><span class="ck" id="eck-m2"></span><span style="flex:1">Soleil épicé (sirop de gingembre, jus d'ananas)</span></div>
-    </div>
+
 
     <div id="pane-boissons" style="display:none">
       <div class="slbl">Softs</div>        <div id="soft-list"></div>
@@ -222,7 +207,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="slbl">Autres extras</div>             <div id="oth-extra-list"></div>
     </div>
     
-    <div id="child-inline" style="display:none !important;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+    <div id="child-inline" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
       <div class="slbl">Menu enfant attaché — 15€</div>
       <div class="opt" id="ci-viande" onclick="togChild('plat','viande')"><span class="ck" id="cick-viande"></span><span style="flex:1">Portion de viandes</span></div>
       <div class="opt" id="ci-riz" onclick="togChildAcc('riz')"><span class="ck" id="cick-riz"></span><span style="flex:1">Riz pilaf</span></div>
@@ -237,7 +222,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span class="tl">Total commande</span>
       <span class="tv" id="order-total-val">0€</span>
     </div>
-    <button class="expbtn" style="margin-top:8px" onclick="toggleChildMenu()">+ Ajouter menu enfant</button>
+    <button class="expbtn" id="btn-child-toggle" style="margin-top:8px" onclick="toggleChildMenu()">🧒 Ajouter un menu enfant — 15€</button>
     <button class="btn-save" id="btn-save" disabled onclick="saveOrder()">Enregistrer</button>
   </div>
   <div class="card">
@@ -490,6 +475,10 @@ function goTable(t) {
   document.getElementById('btn-save').disabled = true;
   document.getElementById('order-total-bar').style.display = 'none';
   document.getElementById('lock-msg').style.display = 'none';
+  var ci2 = document.getElementById('child-inline');
+  var bc2 = document.getElementById('btn-child-toggle');
+  if (ci2) ci2.style.display = 'none';
+  if (bc2) { bc2.textContent = '🧒 Ajouter un menu enfant — 15€'; bc2.style.background = ''; bc2.style.color = ''; }
   unlockMenu();
 }
 
@@ -600,9 +589,11 @@ function goGuest(g) {
   const rnd      = nbRounds + 1;
 
   sel = mkSel(rnd);
-  // Ne pas restaurer acc/dr/ex dans sel — cela fausserait le calcul du total
-  // Les items déjà pris sont affichés via applyMenuLock (verrouillés visuellement)
-  // mais le sel de saisie repart toujours à zéro
+  // Masquer et réinitialiser le bloc menu enfant à chaque changement de convive
+  var ci = document.getElementById('child-inline');
+  var bc = document.getElementById('btn-child-toggle');
+  if (ci) ci.style.display = 'none';
+  if (bc) { bc.textContent = '🧒 Ajouter un menu enfant — 15€'; bc.style.background = ''; bc.style.color = ''; }
 
   drawSVG(); buildDrinks(); buildExtras(); applyUI();
   document.getElementById('btn-save').disabled = false;
@@ -747,7 +738,24 @@ function togChildMock(id){
 
 
 function toggleChildMenu(){
-  goTab('enfant');
+  var el  = document.getElementById('child-inline');
+  var btn = document.getElementById('btn-child-toggle');
+  var open = el.style.display === 'none' || el.style.display === '';
+  if (open) {
+    el.style.display  = 'block';
+    btn.textContent   = '✕ Retirer le menu enfant';
+    btn.style.background = 'var(--bg2)';
+    btn.style.color   = 'var(--text2)';
+  } else {
+    el.style.display  = 'none';
+    btn.textContent   = '🧒 Ajouter un menu enfant — 15€';
+    btn.style.background = '';
+    btn.style.color   = '';
+    // Reset child state
+    sel.child = null;
+    applyUI();
+    updTot();
+  }
 }
 
 // ─── UI ───────────────────────────────────────────────────────────────────────

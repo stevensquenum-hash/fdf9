@@ -230,18 +230,7 @@ function renderTable(t) {
   // Afficher les 10 convives, même sans commande
   Object.keys(tbl).sort((a,b)=>a-b).forEach(g => {
     const gO = tbl[g];
-
     if (!gO || Object.keys(gO).length === 0) return;
-      // Convive ignoré si vide
-      html += '<div class="orow">' +
-        '<div class="ohdr" style="cursor:default">' +
-          '<div class="gtag">C' + g + '</div>' +
-          '<span class="oname">Convive ' + g + '</span>' +
-          '<span style="font-size:11px;color:var(--text2)">En attente</span>' +
-        '</div>' +
-        '</div>';
-      continue;
-    }
 
     const rks      = Object.keys(gO).sort();
     const allPaid  = rks.every(r => gO[r].paid);
@@ -322,7 +311,7 @@ function renderTable(t) {
       '</div>' +
       '<div class="obody">' + body + '</div>';
     html += wrap.outerHTML;
-  }
+  });
   return html;
 }
 
