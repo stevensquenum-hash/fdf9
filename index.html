@@ -194,6 +194,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="ftag">inclus</span>
       </div>
       <div class="lockmsg" id="lock-msg">✓ Menu complet — passez aux boissons / extras</div>
+      <div id="child-inline" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+        <div class="slbl">Menu enfant attaché — 15€</div>
+        <div class="opt" id="ci-viande" onclick="togChild('plat','viande')"><span class="ck" id="cick-viande"></span><span style="flex:1">Portion de viandes</span></div>
+        <div class="opt" id="ci-riz" onclick="togChildAcc('riz')"><span class="ck" id="cick-riz"></span><span style="flex:1">Riz pilaf</span></div>
+        <div class="opt" id="ci-igname" onclick="togChildAcc('igname')"><span class="ck" id="cick-igname"></span><span style="flex:1">Frites d'ignames</span></div>
+        <div class="opt" id="ci-plantain" onclick="togChildAcc('plantain')"><span class="ck" id="cick-plantain"></span><span style="flex:1">Banane plantain</span></div>
+        <div class="opt" id="ci-degue" onclick="togChild('dessert','degue')"><span class="ck" id="cick-degue"></span><span style="flex:1">Dégué</span></div>
+        <div class="opt" id="ci-m1" onclick="togChildMock('mocktail1')"><span class="ck" id="cick-m1"></span><span style="flex:1">Soleil de Dakar (sirop de bissap, jus d'ananas)</span></div>
+        <div class="opt" id="ci-m2" onclick="togChildMock('mocktail2')"><span class="ck" id="cick-m2"></span><span style="flex:1">Soleil épicé (sirop de gingembre, jus d'ananas)</span></div>
+      </div>
     </div>
 
 
@@ -207,17 +217,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="slbl">Autres extras</div>             <div id="oth-extra-list"></div>
     </div>
     
-    <div id="child-inline" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
-      <div class="slbl">Menu enfant attaché — 15€</div>
-      <div class="opt" id="ci-viande" onclick="togChild('plat','viande')"><span class="ck" id="cick-viande"></span><span style="flex:1">Portion de viandes</span></div>
-      <div class="opt" id="ci-riz" onclick="togChildAcc('riz')"><span class="ck" id="cick-riz"></span><span style="flex:1">Riz pilaf</span></div>
-      <div class="opt" id="ci-igname" onclick="togChildAcc('igname')"><span class="ck" id="cick-igname"></span><span style="flex:1">Frites d'ignames</span></div>
-      <div class="opt" id="ci-plantain" onclick="togChildAcc('plantain')"><span class="ck" id="cick-plantain"></span><span style="flex:1">Banane plantain</span></div>
-      <div class="opt" id="ci-degue" onclick="togChild('dessert','degue')"><span class="ck" id="cick-degue"></span><span style="flex:1">Dégué</span></div>
-      <div class="opt" id="ci-m1" onclick="togChildMock('mocktail1')"><span class="ck" id="cick-m1"></span><span style="flex:1">Soleil de Dakar (sirop de bissap, jus d'ananas)</span></div>
-      <div class="opt" id="ci-m2" onclick="togChildMock('mocktail2')"><span class="ck" id="cick-m2"></span><span style="flex:1">Soleil épicé (sirop de gingembre, jus d'ananas)</span></div>
-    </div>
-
     <div class="tbar" id="order-total-bar" style="display:none">
       <span class="tl">Total commande</span>
       <span class="tv" id="order-total-val">0€</span>
