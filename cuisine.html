@@ -112,7 +112,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-const T = 5, G = 10;
+const T = 8, G = 7;
 const ACC    = [{id:'riz',label:'Riz pilaf',e:'🍚'},{id:'igname',label:"Frites d'ignames",e:'🍟'},{id:'plantain',label:'Frites de banane plantain',e:'🍌'}];
 const ACC_EX = [{id:'riz-supp',label:'Riz supp.',e:'🍚'},{id:'igname-supp',label:'Ignames supp.',e:'🍟'},{id:'plantain-supp',label:'Plantain supp.',e:'🍌'}];
 const OTH_EX = [{id:'viande-extra',label:'Viandes extra',e:'🥩'},{id:'degue-extra',label:'Dégué supp.',e:'🥣'}];
@@ -351,7 +351,7 @@ function renderTickets() {
     for (let t=1;t<=T;t++) {
       const n = Object.keys(orders[t]||{}).length;
       if (!n) continue;
-      html += '<div class="table-sep">TABLE '+t+' — '+n+'/10 couverts</div>';
+      html += '<div class="table-sep">TABLE '+t+' — '+n+'/7 couverts</div>';
       html += renderTicketsForTable(t);
     }
   } else {

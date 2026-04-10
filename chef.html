@@ -114,7 +114,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-const T = 5, G = 10;
+const T = 8, G = 7;
 const ACC      = [{id:'riz',label:'Riz pilaf'},{id:'igname',label:"Frites d'ignames"},{id:'plantain',label:'Frites de banane plantain'}];
 const SOFTS    = [{id:'bissape',label:'Bissap'},{id:'gingembre',label:'Jus de gingembre'}];
 const MOCKTAILS= [{id:'mocktail1',label:'Soleil de Dakar'},{id:'mocktail2',label:'Soleil épicé'}];
@@ -324,13 +324,13 @@ function renderOrders() {
   if (curT === 'all') {
     title.textContent = 'Toutes les tables';
     for (let t = 1; t <= T; t++) {
-      html += '<div style="font-size:11px;color:var(--text2);font-weight:600;text-transform:uppercase;margin:10px 0 6px;padding:6px 10px;background:var(--bg2);border-radius:var(--r)">TABLE ' + t + ' — ' + Object.keys(orders[t]||{}).length + '/10 couverts</div>';
+      html += '<div style="font-size:11px;color:var(--text2);font-weight:600;text-transform:uppercase;margin:10px 0 6px;padding:6px 10px;background:var(--bg2);border-radius:var(--r)">TABLE ' + t + ' — ' + Object.keys(orders[t]||{}).length + '/7 couverts</div>';
       html += renderTable(t);
       tabTot += Object.keys(orders[t] || {}).reduce((s, g) =>
         s + Object.keys(orders[t][g]).reduce((ss, rk) => ss + (orders[t][g][rk].total || 0), 0), 0);
     }
   } else {
-    title.textContent = 'Table ' + curT + ' — ' + Object.keys(orders[curT]||{}).length + '/10 couverts';
+    title.textContent = 'Table ' + curT + ' — ' + Object.keys(orders[curT]||{}).length + '/7 couverts';
     html = renderTable(curT);
     tabTot = Object.keys(orders[curT] || {}).reduce((s, g) =>
       s + Object.keys(orders[curT][g]).reduce((ss, rk) => ss + (orders[curT][g][rk].total || 0), 0), 0);
@@ -389,7 +389,7 @@ function exportTxt() {
   for (let t = 1; t <= T; t++) {
     const tbl  = orders[t] || {};
     const keys = Object.keys(tbl).map(Number).sort((a, b) => a - b);
-    txt += 'TABLE ' + t + ' (' + keys.length + '/10 couverts)\n' + '-'.repeat(30) + '\n';
+    txt += 'TABLE ' + t + ' (' + keys.length + '/7 couverts)\n' + '-'.repeat(30) + '\n';
     if (!keys.length) { txt += '  Aucune commande\n\n'; continue; }
     keys.forEach(g => {
       Object.keys(tbl[g]).sort().forEach(rk => {

@@ -131,13 +131,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <body>
 <div class="app">
   <div class="hdr">
-    <div><h1>Commandes — Serveurs</h1><span class="badge">25 avril 2025 · 5 × 10</span></div>
+    <div><h1>Commandes — Serveurs</h1><span class="badge">25 avril 2025 · 8 × 7</span></div>
     <button class="sbtn" onclick="openSettings()">⚙ Prix</button>
   </div>
   <div class="stats">
     <div class="stat"><div class="v" id="s-done">0</div><div class="l">Pris</div></div>
     <div class="stat"><div class="v" id="s-paid">0</div><div class="l">Réglés</div></div>
-    <div class="stat"><div class="v" id="s-left">50</div><div class="l">Restants</div></div>
+    <div class="stat"><div class="v" id="s-left">56</div><div class="l">Restants</div></div>
     <div class="stat"><div class="v" id="s-ca">0€</div><div class="l">CA table</div></div>
   </div>
   <div class="tscroll" id="tbl-sel"></div>
@@ -255,7 +255,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script>
 // ─── CONSTANTES ───────────────────────────────────────────────────────────────
-const T = 5, G = 10;
+const T = 8, G = 7;
 const ADMIN_KEY = 'ev25avril_pwd', DEFAULT_PWD = 'admin2025';
 
 const ACC = [
@@ -1050,7 +1050,7 @@ function updStats() {
     s + Object.keys(tbl[g]).reduce((ss, rk) => ss + (tbl[g][rk].total || 0), 0), 0);
   document.getElementById('s-done').textContent = done;
   document.getElementById('s-paid').textContent = paid;
-  document.getElementById('s-left').textContent = 50 - done;
+  document.getElementById('s-left').textContent = 56 - done;
   document.getElementById('s-ca').textContent   = ca + '€';
 }
 
@@ -1098,7 +1098,7 @@ function exportTxt() {
   for (let t = 1; t <= T; t++) {
     const tbl  = orders[t] || {};
     const keys = Object.keys(tbl).map(Number).sort((a, b) => a - b);
-    txt += 'TABLE ' + t + ' (' + keys.length + '/10 couverts)\n' + '-'.repeat(30) + '\n';
+    txt += 'TABLE ' + t + ' (' + keys.length + '/7 couverts)\n' + '-'.repeat(30) + '\n';
     if (!keys.length) { txt += '  Aucune commande\n\n'; continue; }
     keys.forEach(g => {
       Object.keys(tbl[g]).sort().forEach(rk => {
