@@ -117,14 +117,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 const T = 8, G = 7;
 const ACC      = [{id:'riz',label:'Riz pilaf'},{id:'igname',label:"Frites d'ignames"},{id:'plantain',label:'Frites de banane plantain'}];
 const SOFTS    = [{id:'bissape',label:'Bissap'},{id:'gingembre',label:'Jus de gingembre'}];
-const MOCKTAILS= [{id:'mocktail1',label:'Soleil de Dakar'},{id:'mocktail2',label:'Soleil épicé'}];
-const COCKTAILS= [{id:'cocktail1',label:'Bissap Rum Fresh'},{id:'cocktail2',label:'Gold District'}];
+const MOCKTAILS= [{id:'mocktail1',label:"Reine d'Akwaba"},{id:'mocktail2',label:'Zénith'},{id:'mocktail3',label:'Soleil Épicé'}];
+const COCKTAILS= [{id:'cocktail1',label:'Rubis Flower'},{id:'cocktail2',label:'Gold District'},{id:'cocktail3',label:'La Surprise'}];
 const DRINKS   = [...SOFTS,...MOCKTAILS,...COCKTAILS];
 const ACC_EX   = [{id:'riz-supp',label:'Riz pilaf supplémentaire',pk:'riz-extra'},{id:'igname-supp',label:"Frites d'ignames supplémentaires",pk:'igname'},{id:'plantain-supp',label:'Frites de banane plantain supplémentaires',pk:'plantain'}];
 const OTH_EX   = [{id:'viande-extra',label:'Portion assortiment viandes',pk:'viande-extra'},{id:'degue-extra',label:'Dégué supplémentaire',pk:'degue-extra'}];
 const ALL_EX   = [...ACC_EX,...OTH_EX];
 
-let prices = {igname:4,plantain:3,'riz-extra':2,bissape:2,gingembre:2,mocktail1:5,mocktail2:5,cocktail1:5,cocktail2:5,'viande-extra':7,'degue-extra':4};
+let prices = {igname:4,plantain:3,'riz-extra':2,bissape:2,gingembre:2,mocktail1:4,mocktail2:4,mocktail3:4,cocktail1:5,cocktail2:5,cocktail3:5,'viande-extra':7,'degue-extra':4};
 let orders = {};
 for (let t = 1; t <= T; t++) orders[t] = {};
 let curT = 'all'; // 'all' ou numéro de table
@@ -263,7 +263,7 @@ function renderTable(t) {
       // ─── Menu enfant ────────────────────────────────────────────────────────
       if (o.child) {
         const c = o.child;
-        const mockLabel = {mocktail1:'Soleil de Dakar',mocktail2:'Soleil épicé'}[c.mock] || '';
+        const mockLabel = {mocktail1:"Reine d'Akwaba",mocktail2:'Zénith',mocktail3:'Soleil Épicé'}[c.mock] || '';
         const accLabel = [
           c.acc && c.acc.riz      ? 'Riz pilaf'              : null,
           c.acc && c.acc.igname   ? "Frites d'ignames"       : null,

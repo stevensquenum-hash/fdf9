@@ -175,7 +175,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span class="ftag">1 offerte</span>
       </div>
       <div class="hint">1 seule portion de frites offerte au choix</div>
-      <div class="slbl">Boisson incluse</div>
+      <div class="slbl">Boissons incluses</div>
       <div class="opt" id="p-bissape" onclick="togSoftIncluded('bissape')">
         <span class="ck" id="ck-bissape"></span>
         <span style="flex:1">Jus de bissap</span>
@@ -186,7 +186,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span style="flex:1">Jus de gingembre</span>
         <span class="ftag">inclus</span>
       </div>
-      <div class="hint">1 seule boisson offerte au choix</div>
+      <div class="hint">2 boissons offertes (bissap + gingembre)</div>
       <div class="slbl">Dessert</div>
       <div class="opt" id="p-degue" onclick="togMenu('dessert','degue')">
         <span class="ck" id="ck-degue"></span>
@@ -201,15 +201,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="opt" id="ci-igname" onclick="togChildAcc('igname')"><span class="ck" id="cick-igname"></span><span style="flex:1">Frites d'ignames</span></div>
         <div class="opt" id="ci-plantain" onclick="togChildAcc('plantain')"><span class="ck" id="cick-plantain"></span><span style="flex:1">Banane plantain</span></div>
         <div class="opt" id="ci-degue" onclick="togChild('dessert','degue')"><span class="ck" id="cick-degue"></span><span style="flex:1">Dégué</span></div>
-        <div class="opt" id="ci-m1" onclick="togChildMock('mocktail1')"><span class="ck" id="cick-m1"></span><span style="flex:1">Soleil de Dakar (sirop de bissap, jus d'ananas)</span></div>
-        <div class="opt" id="ci-m2" onclick="togChildMock('mocktail2')"><span class="ck" id="cick-m2"></span><span style="flex:1">Soleil épicé (sirop de gingembre, jus d'ananas)</span></div>
+        <div class="opt" id="ci-m1" onclick="togChildMock('mocktail1')"><span class="ck" id="cick-m1"></span><span style="flex:1">Reine d'Akwaba</span></div>
+        <div class="opt" id="ci-m2" onclick="togChildMock('mocktail2')"><span class="ck" id="cick-m2"></span><span style="flex:1">Soleil Épicé</span></div>
       </div>
     </div>
 
 
     <div id="pane-boissons" style="display:none">
       <div class="slbl">Softs</div>        <div id="soft-list"></div>
-      <div class="slbl">Mocktails — 5€</div>   <div id="mocktail-list"></div>
+      <div class="slbl">Mocktails — 4€</div>   <div id="mocktail-list"></div>
       <div class="slbl">Cocktails — 5€</div> <div id="cocktail-list"></div>
     </div>
     <div id="pane-extras" style="display:none">
@@ -264,8 +264,8 @@ const ACC = [
   { id: 'plantain', label: 'Frites de banane plantain' }
 ];
 const SOFTS     = [{ id: 'bissape',   label: 'Bissap' },    { id: 'gingembre',  label: 'Jus de gingembre' }];
-const MOCKTAILS = [{ id: 'mocktail1', label: "Soleil de Dakar (sirop de bissap, jus d'ananas)" }, { id: 'mocktail2',  label: "Soleil épicé (sirop de gingembre, jus d'ananas)" }];
-const COCKTAILS = [{ id: 'cocktail1', label: 'Bissap Rum Fresh (sirop de bissap, rhum, jus de citron vert)' }, { id: 'cocktail2',  label: 'Gold District (sirop de gingembre, vodka)' }];
+const MOCKTAILS = [{ id: 'mocktail1', label: "Reine d'Akwaba" }, { id: 'mocktail2', label: "Zénith" }, { id: 'mocktail3', label: "Soleil Épicé" }];
+const COCKTAILS = [{ id: 'cocktail1', label: 'Rubis Flower' }, { id: 'cocktail2', label: 'Gold District' }, { id: 'cocktail3', label: 'La Surprise — cocktail sur mesure' }];
 const DRINKS    = [...SOFTS, ...MOCKTAILS, ...COCKTAILS];
 
 const ACC_EX = [
@@ -285,10 +285,12 @@ const PRICE_ITEMS = [
   { id: 'riz-extra',    label: 'Riz pilaf (supp.)'           },
   { id: 'bissape',      label: 'Bissap'                          },
   { id: 'gingembre',    label: 'Jus de gingembre'                 },
-  { id: 'mocktail1',    label: "Soleil de Dakar (sirop de bissap, jus d'ananas)"                       },
-  { id: 'mocktail2',    label: "Soleil épicé (sirop de gingembre, jus d'ananas)"                       },
-  { id: 'cocktail1',    label: 'Bissap Rum Fresh (sirop de bissap, rhum, jus de citron vert)'                       },
-  { id: 'cocktail2',    label: 'Gold District (sirop de gingembre, vodka)'                       },
+  { id: 'mocktail1',    label: "Reine d'Akwaba"                       },
+  { id: 'mocktail2',    label: "Zénith"                               },
+  { id: 'mocktail3',    label: "Soleil Épicé"                         },
+  { id: 'cocktail1',    label: 'Rubis Flower'                         },
+  { id: 'cocktail2',    label: 'Gold District'                        },
+  { id: 'cocktail3',    label: 'La Surprise — cocktail sur mesure'    },
   { id: 'viande-extra', label: 'Portion viandes (extra)'          },
   { id: 'degue-extra',  label: 'Dégué supplémentaire'             }
 ];
@@ -297,8 +299,8 @@ const PRICE_ITEMS = [
 let prices = {
   igname: 4, plantain: 3, 'riz-extra': 2,
   bissape: 2, gingembre: 2,
-  mocktail1: 5, mocktail2: 5,
-  cocktail1: 5, cocktail2: 5,
+  mocktail1: 4, mocktail2: 4, mocktail3: 4,
+  cocktail1: 5, cocktail2: 5, cocktail3: 5,
   'viande-extra': 7, 'degue-extra': 4
 };
 let orders = {};
@@ -393,9 +395,7 @@ function doLoad() {
 
 // ─── CALCUL TOTAL ─────────────────────────────────────────────────────────────
 function togSoftIncluded(id) {
-  const other = id === 'bissape' ? 'gingembre' : 'bissape';
   sel.dr[id] = sel.dr[id] ? 0 : 1;
-  if (sel.dr[id]) sel.dr[other] = 0;
   applyUI();
 }
 
@@ -434,6 +434,7 @@ function calcTotal(o, g) {
       const q = o.dr[i.id] || 0;
       if (!q) return;
       if (rnd === 1 && (i.id === 'bissape' || i.id === 'gingembre')) {
+        // Les 2 softs sont offerts au 1er service (1 unité chacun)
         if (q > 1) tot += (prices[i.id] || 0) * (q - 1);
       } else {
         tot += (prices[i.id] || 0) * q;
@@ -952,8 +953,9 @@ function renderOrders() {
           c.acc && c.acc.plantain ? 'Frites de banane plantain' : null
         ].filter(Boolean).join(', ');
         const childMockLabel = {
-          mocktail1: "Soleil de Dakar (sirop de bissap, jus d'ananas)",
-          mocktail2: "Soleil épicé (sirop de gingembre, jus d'ananas)"
+          mocktail1: "Reine d'Akwaba",
+          mocktail2: "Zénith",
+          mocktail3: "Soleil Épicé"
         }[c.mock] || '';
         lines +=
           '<div class="dline" style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">' +
