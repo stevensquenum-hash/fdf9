@@ -48,6 +48,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .opt{display:flex;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:14px;color:var(--text);background:var(--bg);margin-bottom:5px;min-height:46px;transition:background .1s,border-color .1s}
 .opt.sel{background:var(--bl);border-color:var(--blue);color:var(--bld)}
 .opt.locked{opacity:.6;pointer-events:none}
+.opt.soldout{opacity:.4;pointer-events:none;text-decoration:line-through;color:var(--text2)}
+.opt.soldout .ftag{display:none}
+.qrow.soldout{opacity:.4;pointer-events:none}
+.qrow.soldout .ql{text-decoration:line-through;color:var(--text2)}
+.so-tag{margin-left:auto;font-size:10px;background:#fce8e8;color:#b91c1c;padding:2px 7px;border-radius:99px;font-weight:600}
+.opt.sold-out{opacity:.4;pointer-events:none}
+.opt.sold-out .ftag{background:#f0f0f0;color:#999}
 .ck{width:18px;height:18px;border-radius:50%;border:1px solid var(--border2);margin-right:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
 .opt.sel .ck{background:var(--blue);border-color:var(--blue);color:#fff}
 .ftag{margin-left:auto;font-size:10px;background:var(--gl);color:var(--gld);padding:2px 7px;border-radius:99px;font-weight:600}
@@ -164,10 +171,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <span style="flex:1">Riz pilaf</span>
         <span class="ftag">inclus</span>
       </div>
-      <div class="opt" id="p-igname" onclick="togAcc('igname')">
+      <div class="opt sold-out" id="p-igname" onclick="togAcc('igname')">
         <span class="ck" id="ck-igname"></span>
         <span style="flex:1">Frites d'ignames</span>
-        <span class="ftag">1 offerte</span>
+        <span class="ftag">sold out</span>
       </div>
       <div class="opt" id="p-plantain" onclick="togAcc('plantain')">
         <span class="ck" id="ck-plantain"></span>
@@ -241,6 +248,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <p style="font-size:12px;color:var(--text2);margin-bottom:12px">Modifiez les prix puis appuyez sur Enregistrer.</p>
     <div id="price-fields"></div>
     <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:600">SOLD OUT — ARTICLES ÉPUISÉS</div>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:10px">Les items cochés seront grisés et non-sélectionnables sur tous les appareils.</p>
+      <div id="soldout-fields"></div>
+    </div>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
       <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:600">CHANGER LE MOT DE PASSE</div>
       <div style="display:flex;gap:8px">
         <input type="password" id="new-pwd" placeholder="Nouveau mot de passe"
@@ -305,6 +317,7 @@ let prices = {
 };
 let orders = {};
 for (let t = 1; t <= T; t++) orders[t] = {};
+let soldOut = {};   // { igname: true, mocktail2: true, … }
 let curT = 1, curG = null;
 
 function mkSel(rnd) {
@@ -358,7 +371,8 @@ function initFirebase() {
           }
           for (let t = 1; t <= T; t++) if (!orders[t]) orders[t] = {};
         }
-        if (d.prices) Object.assign(prices, d.prices);
+        if (d.prices)   Object.assign(prices, d.prices);
+        if (d.soldOut)  soldOut = d.soldOut || {};
         buildTables(); drawSVG(); renderOrders(); playReadyAlert(); updStats();
       }
     });
@@ -367,10 +381,10 @@ function initFirebase() {
 
 function doSave() {
   // Sauvegarde locale (backup)
-  try { localStorage.setItem('ev25avril', JSON.stringify({ orders, prices })); } catch(e) {}
+  try { localStorage.setItem('ev25avril', JSON.stringify({ orders, prices, soldOut })); } catch(e) {}
   // Sauvegarde Firebase
   if (db) {
-    db.collection('evenement').doc('data').set({ orders, prices })
+    db.collection('evenement').doc('data').set({ orders, prices, soldOut })
       .catch(e => console.warn('Erreur Firebase save:', e));
   }
 }
@@ -381,7 +395,8 @@ function doLoad() {
     const raw = localStorage.getItem('ev25avril');
     if (!raw) return;
     const p = JSON.parse(raw);
-    if (p.prices) Object.assign(prices, p.prices);
+    if (p.prices)  Object.assign(prices, p.prices);
+    if (p.soldOut) soldOut = p.soldOut || {};
     if (p.orders) {
       for (let t = 1; t <= T; t++) {
         const src = p.orders[t] || p.orders[String(t)] || {};
@@ -791,6 +806,23 @@ function applyUI() {
   const c = sel.child || {acc:{}};
   [['ci-viande','cick-viande',c.plat==='viande'],['ci-riz','cick-riz',!!(c.acc&&c.acc.riz)],['ci-igname','cick-igname',!!(c.acc&&c.acc.igname)],['ci-plantain','cick-plantain',!!(c.acc&&c.acc.plantain)],['ci-degue','cick-degue',c.dessert==='degue'],['ci-m1','cick-m1',c.mock==='mocktail1'],['ci-m2','cick-m2',c.mock==='mocktail2']].forEach(x=>setOpt(x[0],x[1],!!x[2]));
 
+  // Appliquer sold out sur les opts du menu (acc)
+  [['p-igname','igname'],['p-plantain','plantain'],['p-riz','riz'],['p-bissape','bissape'],['p-gingembre','gingembre']].forEach(([eid, sid]) => {
+    const el = document.getElementById(eid);
+    if (!el) return;
+    if (soldOut[sid]) {
+      el.classList.add('soldout');
+      // Ajouter tag si absent
+      if (!el.querySelector('.so-tag')) {
+        const t = document.createElement('span');
+        t.className = 'so-tag'; t.textContent = 'Épuisé';
+        el.appendChild(t);
+      }
+    } else {
+      el.classList.remove('soldout');
+      const t = el.querySelector('.so-tag'); if (t) t.remove();
+    }
+  });
 }
 
 function updTot() {
