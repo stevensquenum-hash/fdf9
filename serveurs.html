@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Serveurs">
 <title>Commandes — Serveurs</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 <style>
 /* Styles propres à la page Serveurs (prise de commande) */
 .app{max-width:480px}
@@ -20,8 +20,6 @@
 .qrow.soldout{opacity:.4;pointer-events:none}
 .qrow.soldout .ql{text-decoration:line-through;color:var(--text2)}
 .so-tag{margin-left:auto;font-size:10px;background:#fce8e8;color:#b91c1c;padding:2px 7px;border-radius:99px;font-weight:600}
-.opt.sold-out{opacity:.4;pointer-events:none}
-.opt.sold-out .ftag{background:#f0f0f0;color:#999}
 .ck{width:18px;height:18px;border-radius:50%;border:1px solid var(--border2);margin-right:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
 .opt.sel .ck{background:var(--blue);border-color:var(--blue);color:#fff}
 .ftag{margin-left:auto;font-size:10px;background:var(--gl);color:var(--gld);padding:2px 7px;border-radius:99px;font-weight:600}
@@ -50,9 +48,6 @@
 .abtn.del{color:#A32D2D;border-color:#F09595}
 .kbadge{animation:kpulse 1.5s infinite}
 @keyframes kpulse{0%,100%{opacity:1}50%{opacity:.5}}
-.sbtn{padding:8px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text2);cursor:pointer;font-size:14px;min-height:38px;display:flex;align-items:center;gap:5px;font-weight:500}
-.prow{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
-.prow label{font-size:14px}
 .pinp{width:90px;padding:8px 10px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;text-align:right;background:var(--bg);color:var(--text);font-weight:600}
 .pinp:focus{outline:none;border-color:var(--blue)}
 </style>
@@ -100,10 +95,10 @@
         <span style="flex:1">Riz pilaf</span>
         <span class="ftag">inclus</span>
       </div>
-      <div class="opt sold-out" id="p-igname" onclick="togAcc('igname')">
+      <div class="opt" id="p-igname" onclick="togAcc('igname')">
         <span class="ck" id="ck-igname"></span>
         <span style="flex:1">Frites d'ignames</span>
-        <span class="ftag">sold out</span>
+        <span class="ftag">1 offerte</span>
       </div>
       <div class="opt" id="p-plantain" onclick="togAcc('plantain')">
         <span class="ck" id="ck-plantain"></span>
@@ -194,9 +189,9 @@
   </div>
 </div>
 
-<script src="menu-data.js"></script>
-<script src="firebase-config.js"></script>
-<script src="helpers.js"></script>
+<script src="menu-data.js?v=2"></script>
+<script src="firebase-config.js?v=2"></script>
+<script src="helpers.js?v=2"></script>
 <script>
 document.title = 'Commandes — Serveurs — ' + EVENT_LABEL;
 document.getElementById('evt-badge').textContent = EVENT_LABEL + ' · ' + T + ' × ' + G;
@@ -252,6 +247,9 @@ const PRICE_ITEMS = [
   { id: 'degue-extra',  label: 'Dégué supplémentaire'             }
 ];
 
+// Items grisables sur l'écran de commande (voir applyUI()) — plat/riz/frites/softs du 1er service
+const SOLDOUT_ITEMS = [...ACC, ...SOFTS];
+
 // ─── ÉTAT ─────────────────────────────────────────────────────────────────────
 let prices = Object.assign({}, DEFAULT_PRICES);
 let orders = {};
@@ -269,7 +267,7 @@ function mkSel(rnd) {
 let sel = mkSel(1);
 
 // ─── STOCKAGE / FIREBASE ────────────────────────────────────────────────────────
-// FB_CONFIG vient de assets/firebase-config.js
+// FB_CONFIG vient de firebase-config.js
 let db = null;
 
 
@@ -306,6 +304,9 @@ function startListen() {
       if (d.prices)   Object.assign(prices, d.prices);
       if (d.soldOut)  soldOut = d.soldOut || {};
       buildTables(); drawSVG(); renderOrders(); playReadyAlert(); updStats();
+      // Répercute en direct un changement de rupture de stock (posé depuis Cuisine ou Bar) ou
+      // de prix sur l'écran actuellement affiché, sans attendre un changement de table/convive.
+      applyUI(); buildDrinks(); buildExtras();
     }
   }, err => {
     console.warn('Erreur snapshot:', err);
@@ -673,16 +674,17 @@ function buildQList(cid, items, sk) {
     const qty = (sel[sk] || {})[item.id] || 0;
     const uid = cid + '__' + item.id;
     const pk  = item.pk || item.id;
+    const isSoldOut = !!soldOut[item.id];
     const row = document.createElement('div');
-    row.className = 'qrow' + (qty > 0 ? ' on' : '');
+    row.className = 'qrow' + (qty > 0 ? ' on' : '') + (isSoldOut ? ' soldout' : '');
     row.id = 'row__' + uid;
     row.innerHTML =
-      '<span class="ql">' + item.label + '</span>' +
+      '<span class="ql">' + item.label + (isSoldOut ? ' <span class="so-tag">Épuisé</span>' : '') + '</span>' +
       '<span class="qp">' + (prices[pk] || 0) + '€</span>' +
       '<div class="qctrl">' +
-        '<button class="qbtn" onclick="chgQty(\'' + sk + '\',\'' + item.id + '\',\'' + uid + '\',-1)">−</button>' +
+        '<button class="qbtn" onclick="chgQty(\'' + sk + '\',\'' + item.id + '\',\'' + uid + '\',-1)"' + (isSoldOut ? ' disabled' : '') + '>−</button>' +
         '<span class="qval" id="qty__' + uid + '">' + qty + '</span>' +
-        '<button class="qbtn" onclick="chgQty(\'' + sk + '\',\'' + item.id + '\',\'' + uid + '\',1)">+</button>' +
+        '<button class="qbtn" onclick="chgQty(\'' + sk + '\',\'' + item.id + '\',\'' + uid + '\',1)"' + (isSoldOut ? ' disabled' : '') + '>+</button>' +
       '</div>';
     el.appendChild(row);
   });
@@ -775,8 +777,9 @@ function applyUI() {
   const c = sel.child || {acc:{}};
   [['ci-viande','cick-viande',c.plat==='viande'],['ci-riz','cick-riz',!!(c.acc&&c.acc.riz)],['ci-igname','cick-igname',!!(c.acc&&c.acc.igname)],['ci-plantain','cick-plantain',!!(c.acc&&c.acc.plantain)],['ci-degue','cick-degue',c.dessert==='degue'],['ci-m1','cick-m1',c.mock==='mocktail1'],['ci-m2','cick-m2',c.mock==='mocktail2']].forEach(x=>setOpt(x[0],x[1],!!x[2]));
 
-  // Appliquer sold out sur les opts du menu (acc)
-  [['p-igname','igname'],['p-plantain','plantain'],['p-riz','riz'],['p-bissape','bissape'],['p-gingembre','gingembre']].forEach(([eid, sid]) => {
+  // Appliquer sold out sur les opts du menu (acc) — 'viande'/'degue' postés depuis Cuisine,
+  // 'riz'/'igname'/'plantain'/'bissape'/'gingembre' depuis Serveurs > ⚙ Prix
+  [['p-viande','viande'],['p-degue','degue'],['p-igname','igname'],['p-plantain','plantain'],['p-riz','riz'],['p-bissape','bissape'],['p-gingembre','gingembre']].forEach(([eid, sid]) => {
     const el = document.getElementById(eid);
     if (!el) return;
     if (soldOut[sid]) {
@@ -845,7 +848,7 @@ function findNext() {
 }
 
 // ─── ACTIONS SERVICES ────────────────────────────────────────────────────────
-// stamp() vient de assets/helpers.js
+// stamp() vient de helpers.js
 function serveGuest(g, rk) {
   const s = stamp();
   orders[curT][g][rk].served     = true;
@@ -881,7 +884,7 @@ function delRound(g, rk) {
 function newRound(g) { goGuest(g); window.scrollTo(0, 0); }
 
 // ─── RENDU COMMANDES ──────────────────────────────────────────────────────────
-// fmtList() vient de assets/helpers.js
+// fmtList() vient de helpers.js
 function renderOrders() {
   const el  = document.getElementById('orders-list');
   const tbl = orders[curT] || {};
@@ -1064,6 +1067,18 @@ function openSettings() {
       '</div>';
     el.appendChild(row);
   });
+  // Seuls le plat/riz/frites/softs offerts au 1er service sont grisables sur l'écran de commande
+  // (voir applyUI()) — les boissons payantes et extras n'ont pas ce traitement visuel pour l'instant.
+  const elSO = document.getElementById('soldout-fields');
+  elSO.innerHTML = '';
+  SOLDOUT_ITEMS.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'prow';
+    row.innerHTML =
+      '<label>' + item.label + '</label>' +
+      '<input type="checkbox" id="so-' + item.id + '" ' + (soldOut[item.id] ? 'checked' : '') + ' style="width:20px;height:20px">';
+    elSO.appendChild(row);
+  });
   document.getElementById('settings-modal').style.display = 'flex';
 }
 function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
@@ -1072,7 +1087,12 @@ function savePrices() {
   PRICE_ITEMS.forEach(item => {
     prices[item.id] = parseFloat(document.getElementById('pi-' + item.id).value) || 0;
   });
-  doSave(); closeSettings(); buildDrinks(); buildExtras(); renderOrders(); updStats();
+  SOLDOUT_ITEMS.forEach(item => {
+    const cb = document.getElementById('so-' + item.id);
+    if (!cb) return;
+    if (cb.checked) soldOut[item.id] = true; else delete soldOut[item.id];
+  });
+  doSave(); closeSettings(); buildDrinks(); buildExtras(); applyUI(); renderOrders(); updStats();
 }
 function changePwd() {
   const v = document.getElementById('new-pwd').value.trim();

@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cuisine">
 <title>Cuisine</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 <style>
 /* Styles propres à la page Cuisine (tickets de préparation) */
 :root {
@@ -65,6 +65,7 @@
     <div><h1>🍳 Cuisine</h1><span class="badge" id="evt-badge"></span></div>
     <div style="display:flex;align-items:center;gap:8px">
       <button class="sound-btn on" id="sound-btn" onclick="toggleSound()">🔔 Son</button>
+      <button class="sound-btn" onclick="openStockModal()">🚫 Stock</button>
       <div class="live" id="live-status"><span class="live-dot"></span>Connexion…</div>
     </div>
   </div>
@@ -92,9 +93,21 @@
   </div>
 </div>
 
-<script src="menu-data.js"></script>
-<script src="firebase-config.js"></script>
-<script src="helpers.js"></script>
+<div class="mbg" id="stock-modal" style="display:none" onclick="closeStockModalOut(event)">
+  <div class="modal">
+    <div class="mhdr">
+      <h2>🚫 Ruptures de stock — Aliments</h2>
+      <button class="mcls" onclick="closeStockModal()">✕</button>
+    </div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Un article coché apparaît grisé et non sélectionnable côté Serveurs, immédiatement.</p>
+    <div id="stock-fields"></div>
+    <button class="msave" onclick="saveStock()">Enregistrer</button>
+  </div>
+</div>
+
+<script src="menu-data.js?v=2"></script>
+<script src="firebase-config.js?v=2"></script>
+<script src="helpers.js?v=2"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
@@ -103,6 +116,7 @@ document.getElementById('evt-badge').textContent = EVENT_LABEL;
 
 let orders = {};
 for (let t = 1; t <= T; t++) orders[t] = {};
+let soldOut = {}; // { igname: true, viande: true, … } — partagé avec Serveurs et Bar
 let curT = 'all';
 let curView = 'new'; // 'new' | 'cooking' | 'ready' | 'tables'
 let soundOn = true;
@@ -138,6 +152,33 @@ function toggleSound() {
   btn.className = 'sound-btn' + (soundOn ? ' on' : '');
 }
 
+// ─── RUPTURES DE STOCK (ALIMENTS) ─────────────────────────────────────────────
+function openStockModal() {
+  const el = document.getElementById('stock-fields');
+  el.innerHTML = '';
+  FOOD_SOLDOUT_ITEMS.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'prow';
+    row.innerHTML =
+      '<label>' + item.label + '</label>' +
+      '<input type="checkbox" id="stock-' + item.id + '" ' + (soldOut[item.id] ? 'checked' : '') + ' style="width:20px;height:20px">';
+    el.appendChild(row);
+  });
+  document.getElementById('stock-modal').style.display = 'flex';
+}
+function closeStockModal() { document.getElementById('stock-modal').style.display = 'none'; }
+function closeStockModalOut(e) { if (e.target === document.getElementById('stock-modal')) closeStockModal(); }
+function saveStock() {
+  FOOD_SOLDOUT_ITEMS.forEach(item => {
+    const cb = document.getElementById('stock-' + item.id);
+    if (!cb) return;
+    if (cb.checked) soldOut[item.id] = true; else delete soldOut[item.id];
+  });
+  db.collection('evenement').doc('data').update({ soldOut })
+    .then(closeStockModal)
+    .catch(e => console.warn('Erreur sauvegarde stock:', e));
+}
+
 // ─── FIREBASE ÉCOUTE ──────────────────────────────────────────────────────────
 let unsubscribe = null, reconnectTimer = null, lastUpdate = Date.now();
 
@@ -151,6 +192,7 @@ function startListen() {
       updStats(); return;
     }
     const d = snap.data();
+    soldOut = d.soldOut || {};
     const newIds = new Set();
     let hasNew = false;
     if (d.orders) {

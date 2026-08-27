@@ -59,6 +59,16 @@ const DEFAULT_PRICES = {
   'viande-extra': 7, 'degue-extra': 4
 };
 
+// Articles "aliments" que la Cuisine peut marquer en rupture de stock (bouton
+// 🚫 Stock sur cuisine.html) — se répercute en direct sur l'écran des serveurs.
+const FOOD_SOLDOUT_ITEMS = [
+  { id: 'viande',   label: 'Assortiment de viandes' },
+  { id: 'riz',      label: 'Riz pilaf' },
+  { id: 'igname',   label: "Frites d'ignames" },
+  { id: 'plantain', label: 'Frites de banane plantain' },
+  { id: 'degue',    label: 'Dégué' }
+];
+
 // Libellés du menu enfant (attaché à la commande d'un adulte, 15€)
 const CHILD_MOCKTAILS = { mocktail1: "Reine d'Akwaba", mocktail2: 'Zénith', mocktail3: 'Soleil Épicé' };
 const CHILD_ACC_LABELS = { riz: 'Riz pilaf', igname: "Frites d'ignames", plantain: 'Frites de banane plantain' };
