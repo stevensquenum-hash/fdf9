@@ -3,115 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bar — Coordination</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bar">
+<title>Bar</title>
+<link rel="stylesheet" href="assets/style.css">
 <style>
-:root{--bg:#fff;--bg2:#f5f5f4;--text:#1a1a1a;--border:rgba(0,0,0,.12);--blue:#185FA5;--green:#1D9E75;--amber:#BA7517;--r:10px}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#eceae6;color:var(--text);margin:0;padding:.75rem}
-.app{max-width:520px;margin:auto}
-.card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-bottom:1rem}
-.ticket{border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden}
-.ticket-h{padding:10px 12px;background:var(--bg2);font-weight:600;display:flex;justify-content:space-between}
-.ticket-b{padding:10px 12px}
-.badge{font-size:11px;padding:3px 8px;border-radius:99px;background:#E1F5EE;color:#085041}
-.empty{text-align:center;padding:2rem;color:#6b6b6b}
-.btn{padding:8px 14px;border:none;border-radius:8px;background:var(--blue);color:#fff;font-weight:600;cursor:pointer}
-.row{padding:6px 0;border-bottom:1px solid var(--border)}
-.row:last-child{border-bottom:none}
+/* Styles propres à la page Bar */
+.stats{grid-template-columns:repeat(3,1fr)}
+.ticket{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:8px}
+.ticket.new{border-color:var(--amber)}
+.ticket.ready{border-color:var(--green)}
+.ticket.served{border-color:var(--border2);opacity:.7}
+.ticket-hdr{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg2);cursor:pointer}
+.ticket.new .ticket-hdr{background:var(--al)}
+.ticket.ready .ticket-hdr{background:var(--gl)}
+.ttag{min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:var(--bl);color:var(--bld)}
+.ticket.new .ttag{background:var(--al);color:var(--ald);border:2px solid var(--amber)}
+.ticket.ready .ttag{background:var(--gl);color:var(--gld);border:2px solid var(--green)}
+.tname{flex:1;font-size:14px;font-weight:600}
+.sbadge-new{font-size:10px;background:var(--al);color:var(--ald);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
+.sbadge-ready{font-size:10px;background:var(--gl);color:var(--gld);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
+.sbadge-served{font-size:10px;background:var(--bg2);color:var(--text2);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
+.ticket-body{padding:10px 12px;border-top:1px solid var(--border);display:none}
+.ticket-body.open{display:block}
+.dline{padding:8px 0;border-bottom:1px solid var(--border)}
+.dline:last-of-type{border-bottom:none}
+.dtop{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600}
+.dline .qty{font-size:12px;background:var(--bg3);color:var(--text2);padding:1px 6px;border-radius:99px;font-weight:700}
+.recipe{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5}
+.kacts{margin-top:10px}
+.kbtn{width:100%;padding:9px 16px;border-radius:var(--r);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:var(--bg);color:var(--text);min-height:40px;font-weight:600}
+.kbtn:active{transform:scale(.97)}
+.kbtn.ready{background:var(--green);color:#fff;border-color:var(--green)}
+.kbtn.unready{background:var(--bg2);color:var(--text2);font-size:12px}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="card">
-    <h2>🍹 Bar — Préparation uniquement</h2>
-    <div id="bar-list"><div class="empty">Connexion…</div></div>
-  <div class="card"><h2>Historique boissons prêtes</h2><div id="bar-history"><div class="empty">Aucune boisson prête</div></div></div></div>
+  <div class="hdr">
+    <div><h1>🍹 Bar</h1><span class="badge" id="evt-badge"></span></div>
+    <div class="live" id="live-status"><span class="live-dot"></span>Connexion…</div>
+  </div>
 
+  <div class="stats">
+    <div class="stat"><div class="v" id="s-new">0</div><div class="l">Nouvelles</div></div>
+    <div class="stat"><div class="v" id="s-ready">0</div><div class="l">Prêtes</div></div>
+    <div class="stat"><div class="v" id="s-served">0</div><div class="l">Servies</div></div>
+  </div>
+
+  <div class="tabs" id="view-tabs">
+    <button class="tab active" id="tab-new"    onclick="goView('new')">🆕 Nouvelles</button>
+    <button class="tab"        id="tab-ready"  onclick="goView('ready')">✅ Prêtes</button>
+    <button class="tab"        id="tab-served" onclick="goView('served')">🍹 Servies</button>
+  </div>
+
+  <div class="card">
+    <div class="ctitle" id="ctitle">Nouvelles commandes</div>
+    <div id="tickets-list"><div class="connecting">Connexion à Firebase…</div></div>
+  </div>
+</div>
+
+<script src="assets/menu-data.js"></script>
+<script src="assets/firebase-config.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-const FB_CONFIG = {
-  apiKey: "AIzaSyBg6vVAIBrmmx23BogWnRx3ZW7BMeSqu7w",
-  authDomain: "commandes-25avril.firebaseapp.com",
-  projectId: "commandes-25avril",
-  storageBucket: "commandes-25avril.firebasestorage.app",
-  messagingSenderId: "359129430877",
-  appId: "1:359129430877:web:d60ac1a3e6dfc7596746b4"
-};
+document.title = 'Bar — ' + EVENT_LABEL;
+document.getElementById('evt-badge').textContent = EVENT_LABEL;
+
+let orders = {};
+for (let t = 1; t <= T; t++) orders[t] = {};
+let curView = 'new'; // 'new' | 'ready' | 'served'
+
 firebase.initializeApp(FB_CONFIG);
 const db = firebase.firestore();
 
-function drinkLabel(id){
-  return {
-    bissape:'Bissap',
-    gingembre:'Jus de gingembre',
-    mocktail1:"Reine d'Akwaba",
-    mocktail2:'Zénith',
-    mocktail3:'Soleil Épicé',
-    cocktail1:'Rubis Flower',
-    cocktail2:'Gold District',
-    cocktail3:'La Surprise — cocktail sur mesure'
-  }[id] || id;
+// ─── Écoute temps réel avec reconnexion automatique ──────────────────────────
+let unsubscribe = null, reconnectTimer = null, lastUpdate = Date.now();
+
+function startListen() {
+  if (unsubscribe) unsubscribe();
+  unsubscribe = db.collection('evenement').doc('data').onSnapshot(snap => {
+    lastUpdate = Date.now();
+    document.getElementById('live-status').innerHTML = '<span class="live-dot"></span>En direct';
+    if (!snap.exists) {
+      document.getElementById('tickets-list').innerHTML = '<div class="connecting">Aucune commande encore.</div>';
+      updStats(); return;
+    }
+    const d = snap.data();
+    if (d.orders) {
+      for (let t = 1; t <= T; t++) {
+        const src = d.orders[t] || d.orders[String(t)] || {};
+        orders[t] = {};
+        Object.keys(src).forEach(g => { orders[t][Number(g)] = src[g]; });
+      }
+      for (let t = 1; t <= T; t++) if (!orders[t]) orders[t] = {};
+    }
+    render(); updStats();
+  }, err => {
+    console.warn('Erreur snapshot:', err);
+    document.getElementById('live-status').innerHTML = '<span style="color:#D85A30">⚠ Hors ligne — reconnexion…</span>';
+    clearTimeout(reconnectTimer);
+    reconnectTimer = setTimeout(startListen, 5000);
+  });
+}
+setInterval(() => { if (Date.now()-lastUpdate > 30000) startListen(); }, 15000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState==='visible') startListen(); });
+
+// ─── SYNC ─────────────────────────────────────────────────────────────────────
+function syncFirebase() {
+  // .update() remplace tout le champ orders — contrairement à .set(...,{merge:true}), qui fusionne
+  // en profondeur et empêcherait "Remettre en attente" de bien s'annuler côté serveur.
+  db.collection('evenement').doc('data').update({orders})
+    .then(() => { render(); updStats(); })
+    .catch(e => console.warn('Erreur sync:', e));
 }
 
-function render(data){
-  let html='';
-  let hist='';
-  const orders = data.orders || {};
-  Object.keys(orders).sort((a,b)=>a-b).forEach(t=>{
-    Object.keys(orders[t]||{}).sort((a,b)=>a-b).forEach(g=>{
-      const guest=orders[t][g];
-      Object.keys(guest).sort().forEach(rk=>{
-        const o=guest[rk];
-        const drinks = Object.entries(o.dr||{}).filter(([k,v])=>v>0);
-        // Ajouter le mocktail enfant si présent
-        const childMock = (o.child && o.child.mock) ? o.child.mock : null;
-        if(childMock) drinks.push([childMock, 1]);
+// ─── ACTIONS ──────────────────────────────────────────────────────────────────
+function markReady(t,g,rk) {
+  if (!orders[t][g] || !orders[t][g][rk]) return;
+  orders[t][g][rk].barStatus = 'ready';
+  syncFirebase();
+}
+function unmarkReady(t,g,rk) {
+  if (!orders[t][g] || !orders[t][g][rk]) return;
+  delete orders[t][g][rk].barStatus;
+  syncFirebase();
+}
 
-        if(!drinks.length) return; // rien à afficher côté bar
+// ─── NAVIGATION PAR ONGLET ─────────────────────────────────────────────────────
+const VIEW_TITLES = { new: 'Nouvelles commandes', ready: 'Boissons prêtes', served: 'Commandes servies' };
 
-        if(o.barStatus==='ready'){
-          // Déjà prêt → historique
-          hist += '<div class="ticket" style="opacity:.5">' +
-            '<div class="ticket-h">Table '+t+' · Convive '+g+' <span class="badge">✓ prêt</span></div>' +
-            '<div class="ticket-b">' +
-            drinks.map(([k,v])=>drinkLabel(k)+' × '+v).join('<br>') +
-            '</div></div>';
-        } else {
-          // En attente → file bar
-          html += '<div class="ticket">' +
-            '<div class="ticket-h">Table '+t+' · Convive '+g+' <span class="badge">'+rk.toUpperCase()+'</span></div>' +
-            '<div class="ticket-b">';
-          drinks.forEach(([k,v])=>{
-            html += '<div class="row">' + drinkLabel(k) + ' × ' + v + '</div>';
-          });
-          html += '<div style="margin-top:8px"><button class="btn" onclick="markReady('+t+','+g+',\''+rk+'\')">Prêt</button></div>' +
-            '</div></div>';
-        }
+function goView(v) {
+  curView = v;
+  ['new','ready','served'].forEach(x => document.getElementById('tab-'+x).classList.toggle('active', x===v));
+  render();
+}
+
+// Une commande a des boissons si un soft/mocktail/cocktail a été pris, ou si un
+// mocktail enfant est attaché.
+function hasDrinks(o) {
+  if (Object.values(o.dr||{}).some(v => v > 0)) return true;
+  if (o.child && o.child.mock) return true;
+  return false;
+}
+
+function drinkItems(o) {
+  const items = Object.entries(o.dr||{}).filter(([k,v]) => v > 0);
+  if (o.child && o.child.mock) items.push([o.child.mock, 1]);
+  return items;
+}
+
+function renderDrinkLine(id, qty) {
+  const item = DRINKS.find(i => i.id === id);
+  const label = item ? item.label : id;
+  const recipe = item && item.recipe ? '<div class="recipe">' + item.recipe + '</div>' : '';
+  return '<div class="dline"><div class="dtop"><span>'+label+'</span>'+(qty>1?'<span class="qty">×'+qty+'</span>':'')+'</div>'+recipe+'</div>';
+}
+
+function renderTicket(t, g, rk, o, ks) {
+  const totalRounds = Object.keys(orders[t][g] || {}).length;
+  const rNum = totalRounds>1 ? ' Svc '+rk.replace('r',''):'';
+  const label = 'T'+t+' · C'+g+rNum;
+
+  let badge = '';
+  if (ks==='new')    badge = '<span class="sbadge-new">Nouvelle</span>';
+  if (ks==='ready')  badge = '<span class="sbadge-ready">✅ Prête</span>';
+  if (ks==='served') badge = '<span class="sbadge-served">Servie</span>';
+
+  let actions = '';
+  if (ks==='new')   actions = '<div class="kacts"><button class="kbtn ready" onclick="markReady('+t+','+g+',\''+rk+'\')">✅ Prêt</button></div>';
+  if (ks==='ready') actions = '<div class="kacts"><button class="kbtn unready" onclick="unmarkReady('+t+','+g+',\''+rk+'\')">↩ Remettre en attente</button></div>';
+
+  const items = drinkItems(o).map(([id,qty]) => renderDrinkLine(id, qty)).join('');
+
+  return '<div class="ticket '+ks+'">' +
+      '<div class="ticket-hdr" onclick="this.nextElementSibling.classList.toggle(\'open\')">' +
+        '<div class="ttag">C'+g+'</div>' +
+        '<span class="tname">'+label+'</span>' +
+        badge +
+      '</div>' +
+      '<div class="ticket-body open">'+items+actions+'</div>' +
+    '</div>';
+}
+
+// File de travail : toutes les commandes du statut courant, toutes tables
+// confondues, triées par ordre d'arrivée.
+function render() {
+  document.getElementById('ctitle').textContent = VIEW_TITLES[curView];
+  const list = [];
+  for (let t = 1; t <= T; t++) {
+    const tbl = orders[t] || {};
+    Object.keys(tbl).forEach(g => {
+      Object.keys(tbl[g]).forEach(rk => {
+        const o = tbl[g][rk];
+        if (!hasDrinks(o)) return;
+        const ks = o.served ? 'served' : (o.barStatus==='ready' ? 'ready' : 'new');
+        if (ks !== curView) return;
+        list.push({ t, g: Number(g), rk, o, ks });
       });
     });
-  });
-  document.getElementById('bar-list').innerHTML = html || '<div class="empty">Aucune commande boisson</div>';
-  document.getElementById('bar-history').innerHTML = hist || '<div class="empty">Aucune boisson prête</div>';
+  }
+  list.sort((a,b) => (a.o.createdAt||0) - (b.o.createdAt||0));
+  const el = document.getElementById('tickets-list');
+  el.innerHTML = list.map(x => renderTicket(x.t, x.g, x.rk, x.o, x.ks)).join('') || '<div class="empty">Aucune commande</div>';
 }
 
-function markReady(t,g,rk){
-  // Mise à jour atomique : lecture → modification → écriture
-  db.collection('evenement').doc('data').get().then(snap=>{
-    if(!snap.exists) return;
-    const d = snap.data();
-    const tKey = String(t), gKey = String(g);
-    if(d.orders && d.orders[tKey] && d.orders[tKey][gKey] && d.orders[tKey][gKey][rk]){
-      d.orders[tKey][gKey][rk].barStatus = 'ready';
-    } else if(d.orders && d.orders[t] && d.orders[t][g] && d.orders[t][g][rk]){
-      d.orders[t][g][rk].barStatus = 'ready';
-    }
-    return db.collection('evenement').doc('data').set(d);
-  }).catch(e => console.warn('markReady error:', e));
+function updStats() {
+  let sN=0, sR=0, sS=0;
+  for (let t=1;t<=T;t++) {
+    Object.keys(orders[t]||{}).forEach(g => {
+      Object.keys(orders[t][g]).forEach(rk => {
+        const o = orders[t][g][rk];
+        if (!hasDrinks(o)) return;
+        if (o.served) sS++;
+        else if (o.barStatus==='ready') sR++;
+        else sN++;
+      });
+    });
+  }
+  document.getElementById('s-new').textContent    = sN;
+  document.getElementById('s-ready').textContent  = sR;
+  document.getElementById('s-served').textContent = sS;
+  document.getElementById('tab-new').textContent    = '🆕 Nouvelles' + (sN ? ' ('+sN+')' : '');
+  document.getElementById('tab-ready').textContent  = '✅ Prêtes'    + (sR ? ' ('+sR+')' : '');
+  document.getElementById('tab-served').textContent = '🍹 Servies'  + (sS ? ' ('+sS+')' : '');
 }
 
-db.collection('evenement').doc('data').onSnapshot(snap=>{
-  if(snap.exists) render(snap.data());
-});
+startListen();
 </script>
 </body>
 </html>

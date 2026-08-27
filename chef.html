@@ -4,90 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Chef — 25 avril">
-<title>Chef — Supervision 25 avril 2025</title>
-<style>
-:root {
-  --bg:#fff; --bg2:#f5f5f4; --bg3:#eceae6;
-  --text:#1a1a1a; --text2:#6b6b6b;
-  --border:rgba(0,0,0,0.12); --border2:rgba(0,0,0,0.22);
-  --blue:#185FA5; --bl:#E6F1FB; --bld:#0C447C;
-  --green:#1D9E75; --gl:#E1F5EE; --gld:#085041;
-  --amber:#BA7517; --al:#FAEEDA; --ald:#633806;
-  --purple:#7F77DD;
-  --r:8px; --rl:12px;
-}
-@media(prefers-color-scheme:dark){:root{
-  --bg:#1c1c1e; --bg2:#2c2c2e; --bg3:#3a3a3c;
-  --text:#f2f2f7; --text2:#aeaeb2;
-  --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.22);
-  --bl:#0c2d4a; --bld:#85B7EB;
-  --gl:#0a2e22; --gld:#5DCAA5;
-  --al:#2e1f05; --ald:#FAC775;
-}}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:16px}
-.app{padding:.75rem;max-width:520px;margin:0 auto}
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:8px}
-.hdr h1{font-size:18px;font-weight:600}
-.badge{font-size:10px;background:var(--bl);color:var(--bld);padding:3px 8px;border-radius:var(--r);white-space:nowrap}
-.live{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600}
-.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem}
-.stat{background:var(--bg2);border-radius:var(--r);padding:8px 10px}
-.stat .v{font-size:18px;font-weight:600}
-.stat .l{font-size:10px;color:var(--text2);margin-top:1px}
-.tscroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem;scrollbar-width:none}
-.tscroll::-webkit-scrollbar{display:none}
-.tbtn{padding:8px 16px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer;font-size:14px;white-space:nowrap;position:relative;flex-shrink:0;min-height:42px;font-weight:500}
-.tbtn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.tbtn .dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--green)}
-.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--rl);padding:1rem;margin-bottom:.875rem}
-.ctitle{font-size:14px;font-weight:600;margin-bottom:12px}
-.empty{text-align:center;padding:2rem;color:var(--text2);font-size:13px}
-.olist{display:flex;flex-direction:column;gap:7px}
-.orow{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
-.ohdr{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg2);cursor:pointer}
-.gtag{min-width:30px;height:30px;border-radius:50%;background:var(--bl);color:var(--bld);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.gtag.paid{background:var(--gl);color:var(--gld)}
-.oname{flex:1;font-size:14px;font-weight:600}
-.otag{font-size:14px;font-weight:600;margin-right:4px}
-.pbadge{font-size:10px;background:var(--gl);color:var(--gld);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
-.sbadge{font-size:10px;background:var(--bl);color:var(--bld);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
-.ubadge{font-size:10px;background:var(--al);color:var(--ald);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
-.obody{padding:10px 12px;border-top:1px solid var(--border);display:none}
-.obody.open{display:block}
-.dline{font-size:13px;line-height:1.9}
-.dline .cat{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;margin-right:2px}
-.ssvc{margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.ssvc:last-child{border-bottom:none;margin-bottom:0}
-.nserv{margin-top:8px;padding:8px 10px;background:var(--bl);border-radius:var(--r);border:1px solid var(--blue)}
-.nserv .nt{font-size:12px;font-weight:700;color:var(--bld)}
-.nserv .nd{font-size:11px;color:var(--bld);margin-top:2px}
-.npay{margin-top:8px;padding:8px 10px;background:var(--gl);border-radius:var(--r);border:1px solid var(--green)}
-.npay .nt{font-size:12px;font-weight:700;color:var(--gld)}
-.npay .nd{font-size:11px;color:var(--gld);margin-top:2px}
-.oacts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.abtn{padding:8px 14px;border-radius:var(--r);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:var(--bg);color:var(--text);min-height:38px;font-weight:500}
-.abtn:active{transform:scale(.95)}
-.abtn.pay{background:var(--bg2);color:var(--text2);border-color:var(--border2)}
-.abtn.pay.done{background:var(--green);color:#fff;border-color:var(--green);font-weight:600}
-.abtn.unpay{background:var(--bg2);color:var(--text2)}
-.rnbadge{font-size:11px;background:var(--bg2);color:var(--text2);padding:2px 7px;border-radius:99px;margin-left:5px}
-.kbadge{font-size:10px;background:var(--gl);color:var(--gld);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:700}
-.kbadge-cooking{font-size:10px;background:var(--al);color:var(--ald);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
-.ttl{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg2);border-radius:var(--r);margin-top:10px}
-.ttl .tl{font-size:13px;color:var(--text2)}
-.ttl .tv{font-size:15px;font-weight:700}
-.connecting{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
-.expbtn{width:100%;margin-top:8px;padding:12px;background:var(--bg2);color:var(--text);border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;min-height:46px}
-</style>
+<meta name="apple-mobile-web-app-title" content="Chef">
+<title>Chef — Supervision</title>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <div class="app">
   <div class="hdr">
-    <div><h1>Supervision chef — Vue cuisine</h1><span class="badge">25 avril 2025</span></div>
+    <div><h1>Supervision chef — Vue cuisine</h1><span class="badge" id="evt-badge"></span></div>
     <div class="live" id="live-status"><span class="live-dot"></span>Connexion…</div>
   </div>
 
@@ -108,35 +32,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span class="tv" id="table-total-val">0€</span>
     </div>
     <button class="expbtn" onclick="exportTxt()">Exporter récapitulatif (.txt)</button>
+    <button class="expbtn" onclick="openDeleteModal()" style="margin-top:8px;background:#FCEAEA;color:#A32D2D;border-color:#F09595">🗑 Supprimer toutes les commandes</button>
   </div>
 </div>
 
+<div class="mbg" id="delete-modal" style="display:none" onclick="closeDeleteModalOut(event)">
+  <div class="modal">
+    <div class="mhdr">
+      <h2>⚠️ Supprimer toutes les commandes</h2>
+      <button class="mcls" onclick="closeDeleteModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">
+      Cette action efface <strong>définitivement</strong> toutes les commandes de toutes les tables,
+      pour les 4 postes (serveurs, bar, cuisine, chef). Les prix, les articles épuisés et les
+      affectations de serveurs ne sont pas touchés. <strong>Impossible à annuler.</strong>
+    </p>
+    <p style="font-size:13px;margin-bottom:8px">Tape <strong>SUPPRIMER</strong> pour confirmer :</p>
+    <input type="text" id="delete-confirm-input" oninput="updateDeleteBtnState()"
+      style="width:100%;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--r);font-size:15px;background:var(--bg);color:var(--text);margin-bottom:14px">
+    <button class="msave" id="delete-confirm-btn" disabled onclick="deleteAllOrders()" style="background:#A32D2D">Supprimer définitivement</button>
+  </div>
+</div>
+
+<script src="assets/menu-data.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/helpers.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-const T = 8, G = 7;
-const ACC      = [{id:'riz',label:'Riz pilaf'},{id:'igname',label:"Frites d'ignames"},{id:'plantain',label:'Frites de banane plantain'}];
-const SOFTS    = [{id:'bissape',label:'Bissap'},{id:'gingembre',label:'Jus de gingembre'}];
-const MOCKTAILS= [{id:'mocktail1',label:"Reine d'Akwaba"},{id:'mocktail2',label:'Zénith'},{id:'mocktail3',label:'Soleil Épicé'}];
-const COCKTAILS= [{id:'cocktail1',label:'Rubis Flower'},{id:'cocktail2',label:'Gold District'},{id:'cocktail3',label:'La Surprise'}];
-const DRINKS   = [...SOFTS,...MOCKTAILS,...COCKTAILS];
-const ACC_EX   = [{id:'riz-supp',label:'Riz pilaf supplémentaire',pk:'riz-extra'},{id:'igname-supp',label:"Frites d'ignames supplémentaires",pk:'igname'},{id:'plantain-supp',label:'Frites de banane plantain supplémentaires',pk:'plantain'}];
-const OTH_EX   = [{id:'viande-extra',label:'Portion assortiment viandes',pk:'viande-extra'},{id:'degue-extra',label:'Dégué supplémentaire',pk:'degue-extra'}];
-const ALL_EX   = [...ACC_EX,...OTH_EX];
+document.title = 'Chef — Supervision — ' + EVENT_LABEL;
+document.getElementById('evt-badge').textContent = EVENT_LABEL;
 
-let prices = {igname:4,plantain:3,'riz-extra':2,bissape:2,gingembre:2,mocktail1:4,mocktail2:4,mocktail3:4,cocktail1:5,cocktail2:5,cocktail3:5,'viande-extra':7,'degue-extra':4};
+let prices = Object.assign({}, DEFAULT_PRICES);
 let orders = {};
 for (let t = 1; t <= T; t++) orders[t] = {};
+let serverAssignments = {}; // { "3": "Sarah", ... } — posé depuis l'accueil
 let curT = 'all'; // 'all' ou numéro de table
-
-const FB_CONFIG = {
-  apiKey: "AIzaSyBg6vVAIBrmmx23BogWnRx3ZW7BMeSqu7w",
-  authDomain: "commandes-25avril.firebaseapp.com",
-  projectId: "commandes-25avril",
-  storageBucket: "commandes-25avril.firebasestorage.app",
-  messagingSenderId: "359129430877",
-  appId: "1:359129430877:web:d60ac1a3e6dfc7596746b4"
-};
 
 firebase.initializeApp(FB_CONFIG);
 const db = firebase.firestore();
@@ -163,6 +94,7 @@ function startListen() {
     }
     const d = snap.data();
     if (d.prices) Object.assign(prices, d.prices);
+    serverAssignments = d.serverAssignments || {};
     if (d.orders) {
       for (let t = 1; t <= T; t++) {
         const src = d.orders[t] || d.orders[String(t)] || {};
@@ -212,22 +144,17 @@ function buildTables() {
     const b = document.createElement('button');
     b.className = 'tbtn' + (curT === t ? ' active' : '');
     const n = Object.keys(orders[t] || {}).length;
-    b.innerHTML = 'Table ' + t + (n > 0 ? '<span class="dot"></span>' : '');
+    const who = serverAssignments[t] ? '<div style="font-size:9px;font-weight:400;opacity:.75;margin-top:1px">' + serverAssignments[t] + '</div>' : '';
+    b.innerHTML = 'Table ' + t + (n > 0 ? '<span class="dot"></span>' : '') + who;
     b.onclick = (t => () => { curT = t; buildTables(); renderOrders(); updStats(); })(t);
     el.appendChild(b);
   }
-}
-
-function fmtList(list, qobj, lbl) {
-  return list.filter(i => (qobj[i.id] || 0) > 0)
-    .map(i => lbl(i) + (qobj[i.id] > 1 ? ' ×' + qobj[i.id] : '')).join(', ');
 }
 
 function renderTable(t) {
   const tbl = orders[t] || {};
   let html = '';
 
-  // Afficher les 10 convives, même sans commande
   Object.keys(tbl).sort((a,b)=>a-b).forEach(g => {
     const gO = tbl[g];
     if (!gO || Object.keys(gO).length === 0) return;
@@ -263,11 +190,11 @@ function renderTable(t) {
       // ─── Menu enfant ────────────────────────────────────────────────────────
       if (o.child) {
         const c = o.child;
-        const mockLabel = {mocktail1:"Reine d'Akwaba",mocktail2:'Zénith',mocktail3:'Soleil Épicé'}[c.mock] || '';
+        const mockLabel = CHILD_MOCKTAILS[c.mock] || '';
         const accLabel = [
-          c.acc && c.acc.riz      ? 'Riz pilaf'              : null,
-          c.acc && c.acc.igname   ? "Frites d'ignames"       : null,
-          c.acc && c.acc.plantain ? 'Frites de banane plantain' : null
+          c.acc && c.acc.riz      ? CHILD_ACC_LABELS.riz      : null,
+          c.acc && c.acc.igname   ? CHILD_ACC_LABELS.igname   : null,
+          c.acc && c.acc.plantain ? CHILD_ACC_LABELS.plantain : null
         ].filter(Boolean).join(', ');
         lines += '<div class="dline" style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">' +
                  '<span style="font-size:12px;font-weight:700;color:var(--purple)">🧒 Menu enfant — 15€</span></div>';
@@ -324,13 +251,15 @@ function renderOrders() {
   if (curT === 'all') {
     title.textContent = 'Toutes les tables';
     for (let t = 1; t <= T; t++) {
-      html += '<div style="font-size:11px;color:var(--text2);font-weight:600;text-transform:uppercase;margin:10px 0 6px;padding:6px 10px;background:var(--bg2);border-radius:var(--r)">TABLE ' + t + ' — ' + Object.keys(orders[t]||{}).length + '/7 couverts</div>';
+      const who = serverAssignments[t] ? ' · 🧑‍💼 ' + serverAssignments[t] : '';
+      html += '<div style="font-size:11px;color:var(--text2);font-weight:600;text-transform:uppercase;margin:10px 0 6px;padding:6px 10px;background:var(--bg2);border-radius:var(--r)">TABLE ' + t + ' — ' + Object.keys(orders[t]||{}).length + '/' + G + ' couverts' + who + '</div>';
       html += renderTable(t);
       tabTot += Object.keys(orders[t] || {}).reduce((s, g) =>
         s + Object.keys(orders[t][g]).reduce((ss, rk) => ss + (orders[t][g][rk].total || 0), 0), 0);
     }
   } else {
-    title.textContent = 'Table ' + curT + ' — ' + Object.keys(orders[curT]||{}).length + '/7 couverts';
+    const who = serverAssignments[curT] ? ' · 🧑‍💼 ' + serverAssignments[curT] : '';
+    title.textContent = 'Table ' + curT + ' — ' + Object.keys(orders[curT]||{}).length + '/' + G + ' couverts' + who;
     html = renderTable(curT);
     tabTot = Object.keys(orders[curT] || {}).reduce((s, g) =>
       s + Object.keys(orders[curT][g]).reduce((ss, rk) => ss + (orders[curT][g][rk].total || 0), 0), 0);
@@ -341,11 +270,6 @@ function renderOrders() {
 }
 
 function togBody(el) { el.nextElementSibling.classList.toggle('open'); }
-
-function stamp() {
-  const now = new Date();
-  return { at: now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0'), date: now.toLocaleDateString('fr-FR') };
-}
 
 function payGuest(t, g, rk) {
   const s = stamp();
@@ -361,9 +285,36 @@ function unpayGuest(t, g, rk) {
   syncFirebase();
 }
 function syncFirebase() {
-  db.collection('evenement').doc('data').set({ orders, prices })
+  // .update() remplace tout le champ orders (Chef ne modifie jamais prices, inutile de le renvoyer)
+  // — contrairement à .set(...,{merge:true}) qui fusionne en profondeur et empêcherait un
+  // "Déjà réglé" -> "Réglé" de bien s'annuler côté serveur.
+  db.collection('evenement').doc('data').update({ orders })
     .then(() => { renderOrders(); updStats(); })
     .catch(e => console.warn('Erreur sync:', e));
+}
+
+// ─── SUPPRESSION DE TOUTES LES COMMANDES ─────────────────────────────────────
+function openDeleteModal() {
+  document.getElementById('delete-confirm-input').value = '';
+  document.getElementById('delete-confirm-btn').disabled = true;
+  document.getElementById('delete-modal').style.display = 'flex';
+}
+function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; }
+function closeDeleteModalOut(e) { if (e.target === document.getElementById('delete-modal')) closeDeleteModal(); }
+function updateDeleteBtnState() {
+  document.getElementById('delete-confirm-btn').disabled =
+    document.getElementById('delete-confirm-input').value.trim() !== 'SUPPRIMER';
+}
+function deleteAllOrders() {
+  if (document.getElementById('delete-confirm-input').value.trim() !== 'SUPPRIMER') return;
+  const empty = {};
+  for (let t = 1; t <= T; t++) empty[t] = {};
+  orders = empty;
+  // .update() ici est essentiel : .set(...,{merge:true}) fusionnerait cet objet vide avec les
+  // commandes existantes au lieu de les effacer (une fusion profonde ne supprime jamais de clés).
+  db.collection('evenement').doc('data').update({ orders })
+    .then(() => { closeDeleteModal(); buildTables(); renderOrders(); updStats(); })
+    .catch(e => console.warn('Erreur suppression:', e));
 }
 
 function updStats() {
@@ -384,12 +335,13 @@ function updStats() {
 }
 
 function exportTxt() {
-  let txt = 'RÉCAPITULATIF COMMANDES — 25 AVRIL 2025\n' + '='.repeat(44) + '\n\n';
+  let txt = 'RÉCAPITULATIF COMMANDES — ' + EVENT_LABEL.toUpperCase() + '\n' + '='.repeat(44) + '\n\n';
   let totalDone = 0;
   for (let t = 1; t <= T; t++) {
     const tbl  = orders[t] || {};
     const keys = Object.keys(tbl).map(Number).sort((a, b) => a - b);
-    txt += 'TABLE ' + t + ' (' + keys.length + '/7 couverts)\n' + '-'.repeat(30) + '\n';
+    const who  = serverAssignments[t] ? ' — servie par ' + serverAssignments[t] : '';
+    txt += 'TABLE ' + t + ' (' + keys.length + '/' + G + ' couverts)' + who + '\n' + '-'.repeat(30) + '\n';
     if (!keys.length) { txt += '  Aucune commande\n\n'; continue; }
     keys.forEach(g => {
       Object.keys(tbl[g]).sort().forEach(rk => {
@@ -416,7 +368,7 @@ function exportTxt() {
   const blob = new Blob([txt],{type:'text/plain;charset=utf-8'});
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  a.href=url; a.download='commandes_25avril_chef.txt'; a.click();
+  a.href=url; a.download='commandes_'+EVENT_SLUG+'_chef.txt'; a.click();
   URL.revokeObjectURL(url);
 }
 

@@ -4,68 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Cuisine — 25 avril">
-<title>Cuisine — 25 avril 2025</title>
+<meta name="apple-mobile-web-app-title" content="Cuisine">
+<title>Cuisine</title>
+<link rel="stylesheet" href="assets/style.css">
 <style>
+/* Styles propres à la page Cuisine (tickets de préparation) */
 :root {
-  --bg:#fff; --bg2:#f5f5f4; --bg3:#eceae6;
-  --text:#1a1a1a; --text2:#6b6b6b;
-  --border:rgba(0,0,0,0.12); --border2:rgba(0,0,0,0.22);
-  --blue:#185FA5; --bl:#E6F1FB; --bld:#0C447C;
-  --green:#1D9E75; --gl:#E1F5EE; --gld:#085041;
-  --amber:#BA7517; --al:#FAEEDA; --ald:#633806;
   --orange:#D85A30; --ol:#FDEEE8; --old:#8B2A0F;
-  --r:8px; --rl:12px;
 }
 @media(prefers-color-scheme:dark){:root{
-  --bg:#1c1c1e; --bg2:#2c2c2e; --bg3:#3a3a3c;
-  --text:#f2f2f7; --text2:#aeaeb2;
-  --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.22);
-  --bl:#0c2d4a; --bld:#85B7EB;
-  --gl:#0a2e22; --gld:#5DCAA5;
-  --al:#2e1f05; --ald:#FAC775;
   --ol:#2e1205; --old:#F4956A;
 }}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:16px}
-.app{padding:.75rem;max-width:520px;margin:0 auto}
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:8px}
-.hdr h1{font-size:18px;font-weight:600}
-.badge{font-size:10px;background:var(--ol);color:var(--old);padding:3px 8px;border-radius:var(--r);white-space:nowrap;font-weight:600}
-.live{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600}
-.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem}
-.stat{background:var(--bg2);border-radius:var(--r);padding:8px 10px}
-.stat .v{font-size:18px;font-weight:600}
-.stat .l{font-size:10px;color:var(--text2);margin-top:1px}
-.tscroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem;scrollbar-width:none}
-.tscroll::-webkit-scrollbar{display:none}
-.tbtn{padding:8px 16px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer;font-size:14px;white-space:nowrap;position:relative;flex-shrink:0;min-height:42px;font-weight:500}
+.badge{background:var(--ol);color:var(--old)}
 .tbtn.active{background:var(--orange);color:#fff;border-color:var(--orange)}
-.tbtn .dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--amber)}
-.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--rl);padding:1rem;margin-bottom:.875rem}
-.ctitle{font-size:14px;font-weight:600;margin-bottom:12px}
-.empty{text-align:center;padding:2rem;color:var(--text2);font-size:13px}
-.connecting{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
+.tbtn .dot{background:var(--amber)}
 .ticket{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:8px}
 .ticket.new{border-color:var(--amber);animation:npulse 2s ease-in-out 3}
 @keyframes npulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 3px var(--al)}}
 .ticket.cooking{border-color:var(--orange)}
 .ticket.ready{border-color:var(--green)}
+.ticket.sent{border-color:var(--blue)}
 .ticket-hdr{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg2);cursor:pointer}
 .ticket.new .ticket-hdr{background:var(--al)}
 .ticket.cooking .ticket-hdr{background:var(--ol)}
 .ticket.ready .ticket-hdr{background:var(--gl)}
+.ticket.sent .ticket-hdr{background:var(--bl)}
 .ttag{min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:var(--bl);color:var(--bld)}
 .ticket.new .ttag{background:var(--al);color:var(--ald);border:2px solid var(--amber)}
 .ticket.cooking .ttag{background:var(--ol);color:var(--old);border:2px solid var(--orange)}
 .ticket.ready .ttag{background:var(--gl);color:var(--gld);border:2px solid var(--green)}
+.ticket.sent .ttag{background:var(--bl);color:var(--bld);border:2px solid var(--blue)}
 .tname{flex:1;font-size:14px;font-weight:600}
 .ttime{font-size:11px;color:var(--text2);margin-right:6px}
 .sbadge-new{font-size:10px;background:var(--al);color:var(--ald);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
 .sbadge-cooking{font-size:10px;background:var(--ol);color:var(--old);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
 .sbadge-ready{font-size:10px;background:var(--gl);color:var(--gld);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
+.sbadge-sent{font-size:10px;background:var(--bl);color:var(--bld);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
 .sbadge-served{font-size:10px;background:var(--bl);color:var(--bld);padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap}
 .ticket-body{padding:10px 12px;border-top:1px solid var(--border);display:none}
 .ticket-body.open{display:block}
@@ -78,6 +52,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .kbtn:active{transform:scale(.95)}
 .kbtn.cook{background:var(--orange);color:#fff;border-color:var(--orange)}
 .kbtn.ready{background:var(--green);color:#fff;border-color:var(--green)}
+.kbtn.sent{background:var(--blue);color:#fff;border-color:var(--blue)}
 .kbtn.unready{background:var(--bg2);color:var(--text2);font-size:12px}
 .table-sep{font-size:11px;color:var(--text2);font-weight:600;text-transform:uppercase;margin:12px 0 6px;padding:6px 10px;background:var(--bg2);border-radius:var(--r)}
 .sound-btn{padding:6px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text2);cursor:pointer;font-size:13px;min-height:34px;font-weight:500}
@@ -87,7 +62,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <body>
 <div class="app">
   <div class="hdr">
-    <div><h1>🍳 Cuisine</h1><span class="badge">25 avril 2025</span></div>
+    <div><h1>🍳 Cuisine</h1><span class="badge" id="evt-badge"></span></div>
     <div style="display:flex;align-items:center;gap:8px">
       <button class="sound-btn on" id="sound-btn" onclick="toggleSound()">🔔 Son</button>
       <div class="live" id="live-status"><span class="live-dot"></span>Connexion…</div>
@@ -101,38 +76,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="stat"><div class="v" id="s-done">0</div><div class="l">Servies</div></div>
   </div>
 
-  <div class="tscroll" id="tbl-sel"></div>
+  <div class="tabs" id="view-tabs">
+    <button class="tab active" id="tab-new"     onclick="goView('new')">🆕 Nouvelles</button>
+    <button class="tab"        id="tab-cooking" onclick="goView('cooking')">🔥 Préparation</button>
+    <button class="tab"        id="tab-ready"   onclick="goView('ready')">✅ Prêt à envoyer</button>
+    <button class="tab"        id="tab-sent"    onclick="goView('sent')">🚪 Livré en salle</button>
+    <button class="tab"        id="tab-tables"  onclick="goView('tables')">🗂 Tables</button>
+  </div>
+
+  <div class="tscroll" id="tbl-sel" style="display:none"></div>
 
   <div class="card">
-    <div class="ctitle" id="table-title">Toutes les tables</div>
+    <div class="ctitle" id="table-title">Nouvelles commandes</div>
     <div id="tickets-list"><div class="connecting">Connexion à Firebase…</div></div>
   </div>
 </div>
 
+<script src="assets/menu-data.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/helpers.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-const T = 8, G = 7;
-const ACC    = [{id:'riz',label:'Riz pilaf',e:'🍚'},{id:'igname',label:"Frites d'ignames",e:'🍟'},{id:'plantain',label:'Frites de banane plantain',e:'🍌'}];
-const ACC_EX = [{id:'riz-supp',label:'Riz supp.',e:'🍚'},{id:'igname-supp',label:'Ignames supp.',e:'🍟'},{id:'plantain-supp',label:'Plantain supp.',e:'🍌'}];
-const OTH_EX = [{id:'viande-extra',label:'Viandes extra',e:'🥩'},{id:'degue-extra',label:'Dégué supp.',e:'🥣'}];
-const ALL_EX = [...ACC_EX,...OTH_EX];
+document.title = 'Cuisine — ' + EVENT_LABEL;
+document.getElementById('evt-badge').textContent = EVENT_LABEL;
 
 let orders = {};
 for (let t = 1; t <= T; t++) orders[t] = {};
 let curT = 'all';
+let curView = 'new'; // 'new' | 'cooking' | 'ready' | 'tables'
 let soundOn = true;
 let knownOrders = new Set();
 let firstLoad = true;
-
-const FB_CONFIG = {
-  apiKey: "AIzaSyBg6vVAIBrmmx23BogWnRx3ZW7BMeSqu7w",
-  authDomain: "commandes-25avril.firebaseapp.com",
-  projectId: "commandes-25avril",
-  storageBucket: "commandes-25avril.firebasestorage.app",
-  messagingSenderId: "359129430877",
-  appId: "1:359129430877:web:d60ac1a3e6dfc7596746b4"
-};
 
 firebase.initializeApp(FB_CONFIG);
 const db = firebase.firestore();
@@ -173,7 +148,7 @@ function startListen() {
     document.getElementById('live-status').innerHTML = '<span class="live-dot"></span>En direct';
     if (!snap.exists) {
       document.getElementById('tickets-list').innerHTML = '<div class="connecting">Aucune commande encore.</div>';
-      buildTables(); updStats(); return;
+      updStats(); return;
     }
     const d = snap.data();
     const newIds = new Set();
@@ -196,7 +171,7 @@ function startListen() {
     if (hasNew) playBeep();
     knownOrders = newIds;
     firstLoad = false;
-    buildTables(); renderTickets(); updStats();
+    render(); updStats();
   }, err => {
     document.getElementById('live-status').innerHTML = '<span style="color:#D85A30">⚠ Hors ligne — reconnexion…</span>';
     clearTimeout(reconnectTimer);
@@ -208,14 +183,12 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 
 // ─── SYNC ─────────────────────────────────────────────────────────────────────
 function syncFirebase() {
-  db.collection('evenement').doc('data').set({orders})
-    .then(() => { renderTickets(); updStats(); })
+  // .update() remplace tout le champ orders (contrairement à .set(...,{merge:true}), qui fusionne
+  // en profondeur et empêcherait un retour en arrière de statut de se propager), sans toucher aux
+  // autres champs du document (prices, soldOut, serverAssignments).
+  db.collection('evenement').doc('data').update({orders})
+    .then(() => { render(); updStats(); })
     .catch(e => console.warn('Erreur sync:',e));
-}
-
-function stamp() {
-  const n = new Date();
-  return { at: n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0'), date: n.toLocaleDateString('fr-FR') };
 }
 
 // ─── ACTIONS ──────────────────────────────────────────────────────────────────
@@ -242,6 +215,44 @@ function unsetReady(t,g,rk) {
   delete orders[t][g][rk].readyDate;
   syncFirebase();
 }
+function setSent(t,g,rk) {
+  if (!orders[t][g]||!orders[t][g][rk]) return;
+  const s = stamp();
+  orders[t][g][rk].kitchenStatus = 'sent';
+  orders[t][g][rk].sentAt = s.at;
+  orders[t][g][rk].sentDate = s.date;
+  syncFirebase();
+}
+function unsetSent(t,g,rk) {
+  if (!orders[t][g]||!orders[t][g][rk]) return;
+  orders[t][g][rk].kitchenStatus = 'ready';
+  delete orders[t][g][rk].sentAt;
+  delete orders[t][g][rk].sentDate;
+  syncFirebase();
+}
+
+// ─── NAVIGATION PAR ONGLET ─────────────────────────────────────────────────────
+// 'new'/'cooking'/'ready' : file de travail, toutes tables mélangées, triée par
+// ordre d'arrivée. 'tables' : détail table par table (vue de référence complète).
+const VIEW_TITLES = { new: 'Nouvelles commandes', cooking: 'Commandes en préparation', ready: 'Prêt à envoyer en salle', sent: 'Livré en salle' };
+
+function goView(v) {
+  curView = v;
+  ['new','cooking','ready','sent','tables'].forEach(x => document.getElementById('tab-'+x).classList.toggle('active', x===v));
+  render();
+}
+
+function render() {
+  const tblSel = document.getElementById('tbl-sel');
+  if (curView === 'tables') {
+    tblSel.style.display = '';
+    buildTables();
+    renderTablesView();
+  } else {
+    tblSel.style.display = 'none';
+    renderQueueView(curView);
+  }
+}
 
 // ─── TABLES NAV ───────────────────────────────────────────────────────────────
 function buildTables() {
@@ -250,19 +261,37 @@ function buildTables() {
   const all = document.createElement('button');
   all.className = 'tbtn'+(curT==='all'?' active':'');
   all.textContent = 'Toutes';
-  all.onclick = () => { curT='all'; buildTables(); renderTickets(); };
+  all.onclick = () => { curT='all'; buildTables(); renderTablesView(); };
   el.appendChild(all);
   for (let t = 1; t <= T; t++) {
     const b = document.createElement('button');
     b.className = 'tbtn'+(curT===t?' active':'');
     const hasPending = Object.keys(orders[t]||{}).some(g =>
-      Object.keys(orders[t][g]).some(rk => { const ks=orders[t][g][rk].kitchenStatus; return !ks||ks==='cooking'; })
+      Object.keys(orders[t][g]).some(rk => {
+        const o = orders[t][g][rk];
+        if (!hasFood(o)) return false;
+        const ks = o.kitchenStatus;
+        return !ks || ks === 'cooking';
+      })
     );
     const n = Object.keys(orders[t]||{}).length;
     b.innerHTML = 'Table '+t+(hasPending&&n>0?'<span class="dot"></span>':'');
-    b.onclick = (t=>()=>{ curT=t; buildTables(); renderTickets(); })(t);
+    b.onclick = (t=>()=>{ curT=t; buildTables(); renderTablesView(); })(t);
     el.appendChild(b);
   }
+}
+
+// La cuisine ne prépare pas les boissons : une commande sans aucun plat/accompagnement/
+// dessert/extra (même côté menu enfant) n'a rien à faire apparaître ici.
+function hasFood(o) {
+  if (o.plat === 'viande') return true;
+  if (ACC.some(i => (o.acc||{})[i.id] > 0)) return true;
+  if (o.dessert === 'degue') return true;
+  if (ALL_EX.some(i => (o.ex||{})[i.id] > 0)) return true;
+  const c = o.child;
+  if (c && (c.plat === 'viande' || c.dessert === 'degue' ||
+      (c.acc && (c.acc.riz || c.acc.igname || c.acc.plantain)))) return true;
+  return false;
 }
 
 // ─── RENDU ────────────────────────────────────────────────────────────────────
@@ -271,29 +300,66 @@ function renderKitchenItems(o) {
   if (o.plat==='viande') html += '<div class="pline"><span class="emoji">🥩</span><span>Assortiment viandes</span></div>';
   ACC.forEach(i => {
     const qty=(o.acc||{})[i.id]||0;
-    if (qty>0) html += '<div class="pline"><span class="emoji">'+i.e+'</span><span>'+i.label+'</span>'+(qty>1?'<span class="qty">×'+qty+'</span>':'')+'</div>';
+    if (qty>0) html += '<div class="pline"><span class="emoji">'+i.emoji+'</span><span>'+i.label+'</span>'+(qty>1?'<span class="qty">×'+qty+'</span>':'')+'</div>';
   });
   if (o.dessert==='degue') html += '<div class="pline"><span class="emoji">🥣</span><span>Dégué</span></div>';
   ALL_EX.forEach(i => {
     const qty=(o.ex||{})[i.id]||0;
-    if (qty>0) html += '<div class="pline"><span class="emoji">'+i.e+'</span><span>'+i.label+'</span>'+(qty>1?'<span class="qty">×'+qty+'</span>':'')+'</div>';
+    if (qty>0) html += '<div class="pline"><span class="emoji">'+i.emoji+'</span><span>'+i.label+'</span>'+(qty>1?'<span class="qty">×'+qty+'</span>':'')+'</div>';
   });
-  // ─── Menu enfant ────────────────────────────────────────────────────────────
+  // ─── Menu enfant (partie nourriture uniquement — les boissons ne s'affichent pas en cuisine) ──
   if (o.child) {
     const c = o.child;
-    const mockLabels = {mocktail1:"Reine d'Akwaba",mocktail2:'Zénith',mocktail3:'Soleil Épicé'};
-    const accIcons   = {riz:'🍚',igname:'🍟',plantain:'🍌'};
-    const accLabels  = {riz:'Riz pilaf',igname:"Frites d'ignames",plantain:'Frites de banane plantain'};
-    html += '<div class="pline" style="border-top:2px dashed var(--border);margin-top:4px;padding-top:8px"><span class="emoji">🧒</span><span style="font-weight:700">Menu enfant</span></div>';
-    if (c.plat==='viande') html += '<div class="pline" style="padding-left:16px"><span class="emoji">🥩</span><span>Portion de viandes</span></div>';
-    ['riz','igname','plantain'].forEach(function(id){
-      if (c.acc && c.acc[id]) html += '<div class="pline" style="padding-left:16px"><span class="emoji">'+accIcons[id]+'</span><span>'+accLabels[id]+'</span></div>';
-    });
-    if (c.dessert==='degue') html += '<div class="pline" style="padding-left:16px"><span class="emoji">🥣</span><span>Dégué</span></div>';
-    if (c.mock && mockLabels[c.mock]) html += '<div class="pline" style="padding-left:16px"><span class="emoji">🧃</span><span>'+mockLabels[c.mock]+'</span></div>';
+    const childHasFood = c.plat==='viande' || c.dessert==='degue' || (c.acc && (c.acc.riz||c.acc.igname||c.acc.plantain));
+    if (childHasFood) {
+      html += '<div class="pline" style="border-top:2px dashed var(--border);margin-top:4px;padding-top:8px"><span class="emoji">🧒</span><span style="font-weight:700">Menu enfant</span></div>';
+      if (c.plat==='viande') html += '<div class="pline" style="padding-left:16px"><span class="emoji">🥩</span><span>Portion de viandes</span></div>';
+      ['riz','igname','plantain'].forEach(function(id){
+        if (c.acc && c.acc[id]) html += '<div class="pline" style="padding-left:16px"><span class="emoji">'+CHILD_ACC_EMOJI[id]+'</span><span>'+CHILD_ACC_LABELS[id]+'</span></div>';
+      });
+      if (c.dessert==='degue') html += '<div class="pline" style="padding-left:16px"><span class="emoji">🥣</span><span>Dégué</span></div>';
+    }
   }
-  if (!html) html = '<div style="font-size:13px;color:var(--text2);padding:6px 0">Boissons uniquement</div>';
   return html;
+}
+
+function renderTicket(t, g, rk, o) {
+  const totalRounds = Object.keys(orders[t][g] || {}).length;
+  const ks = o.served ? 'served' : (o.kitchenStatus||'new');
+  const rNum = totalRounds>1 ? ' Svc '+rk.replace('r',''):'';
+  const label = 'T'+t+' · C'+g+rNum;
+
+  let badge='', cls='';
+  if (ks==='new')     { badge='<span class="sbadge-new">Nouvelle</span>';     cls='new'; }
+  if (ks==='cooking') { badge='<span class="sbadge-cooking">🔥 En prépa</span>'; cls='cooking'; }
+  if (ks==='ready')   { badge='<span class="sbadge-ready">✅ Prête</span>';    cls='ready'; }
+  if (ks==='sent')    { badge='<span class="sbadge-sent">📤 Envoyée</span>';   cls='sent'; }
+  if (ks==='served')  { badge='<span class="sbadge-served">Servie</span>';     cls='served'; }
+
+  const timeLabel = o.cookingAt ? '<span class="ttime">Débuté '+o.cookingAt+'</span>' : '';
+
+  let actions = '<div class="kacts">';
+  if (ks==='new') {
+    actions += '<button class="kbtn cook" onclick="setCooking('+t+','+g+',\''+rk+'\')">🔥 En préparation</button>';
+    actions += '<button class="kbtn ready" onclick="setReady('+t+','+g+',\''+rk+'\')">✅ Prêt à envoyer</button>';
+  } else if (ks==='cooking') {
+    actions += '<button class="kbtn ready" onclick="setReady('+t+','+g+',\''+rk+'\')">✅ Prêt à envoyer</button>';
+  } else if (ks==='ready') {
+    actions += '<button class="kbtn sent" onclick="setSent('+t+','+g+',\''+rk+'\')">📤 Envoyé</button>';
+    actions += '<button class="kbtn unready" onclick="unsetReady('+t+','+g+',\''+rk+'\')">↩ Remettre en prépa</button>';
+  } else if (ks==='sent') {
+    actions += '<button class="kbtn unready" onclick="unsetSent('+t+','+g+',\''+rk+'\')">↩ Remettre prêt à envoyer</button>';
+  }
+  actions += '</div>';
+
+  return '<div class="ticket '+cls+'">' +
+      '<div class="ticket-hdr" onclick="this.nextElementSibling.classList.toggle(\'open\')">' +
+        '<div class="ttag">C'+g+'</div>' +
+        '<span class="tname">'+label+'</span>' +
+        timeLabel+badge +
+      '</div>' +
+      '<div class="ticket-body open">'+renderKitchenItems(o)+actions+'</div>' +
+    '</div>';
 }
 
 function renderTicketsForTable(t) {
@@ -302,47 +368,16 @@ function renderTicketsForTable(t) {
   for (let g = 1; g <= G; g++) {
     const gO = tbl[g];
     if (!gO||Object.keys(gO).length===0) continue;
-    const rks = Object.keys(gO).sort();
-    rks.forEach(rk => {
+    Object.keys(gO).sort().forEach(rk => {
       const o = gO[rk];
-      const ks = o.served ? 'served' : (o.kitchenStatus||'new');
-      const rNum = rks.length>1?' Svc '+rk.replace('r',''):'';
-      const label = 'T'+t+' · C'+g+rNum;
-
-      let badge='', cls='';
-      if (ks==='new')     { badge='<span class="sbadge-new">Nouvelle</span>';     cls='new'; }
-      if (ks==='cooking') { badge='<span class="sbadge-cooking">🔥 En prépa</span>'; cls='cooking'; }
-      if (ks==='ready')   { badge='<span class="sbadge-ready">✅ Prête</span>';    cls='ready'; }
-      if (ks==='served')  { badge='<span class="sbadge-served">Servie</span>';     cls='served'; }
-
-      const timeLabel = o.cookingAt ? '<span class="ttime">Débuté '+o.cookingAt+'</span>' : '';
-
-      let actions = '<div class="kacts">';
-      if (ks==='new') {
-        actions += '<button class="kbtn cook" onclick="setCooking('+t+','+g+',\''+rk+'\')">🔥 En préparation</button>';
-        actions += '<button class="kbtn ready" onclick="setReady('+t+','+g+',\''+rk+'\')">✅ Prêt à envoyer</button>';
-      } else if (ks==='cooking') {
-        actions += '<button class="kbtn ready" onclick="setReady('+t+','+g+',\''+rk+'\')">✅ Prêt à envoyer</button>';
-      } else if (ks==='ready') {
-        actions += '<button class="kbtn unready" onclick="unsetReady('+t+','+g+',\''+rk+'\')">↩ Remettre en prépa</button>';
-      }
-      actions += '</div>';
-
-      html +=
-        '<div class="ticket '+cls+'">' +
-          '<div class="ticket-hdr" onclick="this.nextElementSibling.classList.toggle(\'open\')">' +
-            '<div class="ttag">C'+g+'</div>' +
-            '<span class="tname">'+label+'</span>' +
-            timeLabel+badge +
-          '</div>' +
-          '<div class="ticket-body open">'+renderKitchenItems(o)+actions+'</div>' +
-        '</div>';
+      if (!hasFood(o)) return;
+      html += renderTicket(t, g, rk, o);
     });
   }
   return html;
 }
 
-function renderTickets() {
+function renderTablesView() {
   const el = document.getElementById('tickets-list');
   const title = document.getElementById('table-title');
   let html = '';
@@ -351,7 +386,7 @@ function renderTickets() {
     for (let t=1;t<=T;t++) {
       const n = Object.keys(orders[t]||{}).length;
       if (!n) continue;
-      html += '<div class="table-sep">TABLE '+t+' — '+n+'/7 couverts</div>';
+      html += '<div class="table-sep">TABLE '+t+' — '+n+'/'+G+' couverts</div>';
       html += renderTicketsForTable(t);
     }
   } else {
@@ -361,13 +396,38 @@ function renderTickets() {
   el.innerHTML = html||'<div class="empty">Aucune commande</div>';
 }
 
+// File de travail : toutes les commandes d'un même statut, toutes tables
+// confondues, triées par ordre d'arrivée (les commandes sans horodatage —
+// enregistrées avant l'ajout de ce suivi — sont traitées comme les plus anciennes).
+function renderQueueView(status) {
+  document.getElementById('table-title').textContent = VIEW_TITLES[status];
+  const list = [];
+  for (let t = 1; t <= T; t++) {
+    const tbl = orders[t] || {};
+    Object.keys(tbl).forEach(g => {
+      Object.keys(tbl[g]).forEach(rk => {
+        const o = tbl[g][rk];
+        if (!hasFood(o) || o.served) return;
+        if ((o.kitchenStatus||'new') !== status) return;
+        list.push({ t, g: Number(g), rk, o });
+      });
+    });
+  }
+  list.sort((a,b) => (a.o.createdAt||0) - (b.o.createdAt||0));
+  const el = document.getElementById('tickets-list');
+  el.innerHTML = list.map(x => renderTicket(x.t, x.g, x.rk, x.o)).join('') || '<div class="empty">Aucune commande</div>';
+}
+
 function updStats() {
-  let sN=0,sC=0,sR=0,sD=0;
+  let sN=0,sC=0,sR=0,sS=0,sD=0;
   for (let t=1;t<=T;t++) {
     Object.keys(orders[t]||{}).forEach(g => {
       Object.keys(orders[t][g]).forEach(rk => {
-        const o=orders[t][g][rk], ks=o.kitchenStatus||'new';
+        const o=orders[t][g][rk];
+        if (!hasFood(o)) return;
+        const ks=o.kitchenStatus||'new';
         if (o.served) sD++;
+        else if (ks==='sent')    sS++;
         else if (ks==='ready')   sR++;
         else if (ks==='cooking') sC++;
         else sN++;
@@ -378,6 +438,10 @@ function updStats() {
   document.getElementById('s-cook').textContent = sC;
   document.getElementById('s-ready').textContent= sR;
   document.getElementById('s-done').textContent = sD;
+  document.getElementById('tab-new').textContent     = '🆕 Nouvelles'      + (sN ? ' ('+sN+')' : '');
+  document.getElementById('tab-cooking').textContent = '🔥 Préparation'    + (sC ? ' ('+sC+')' : '');
+  document.getElementById('tab-ready').textContent   = '✅ Prêt à envoyer' + (sR ? ' ('+sR+')' : '');
+  document.getElementById('tab-sent').textContent    = '🚪 Livré en salle' + (sS ? ' ('+sS+')' : '');
 }
 
 startListen();
