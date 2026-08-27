@@ -1,0 +1,110 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Design commun aux 5 pages de l'outil (accueil, serveurs, bar, cuisine, chef).
+   Modifier une couleur ou un style ici l'applique partout automatiquement.
+   Chaque page garde ensuite, dans sa propre balise <style>, uniquement ce qui
+   lui est spécifique (ex: les tickets de la cuisine, les cases à cocher des
+   serveurs, les cartes de l'accueil).
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg:#fff; --bg2:#f5f5f4; --bg3:#eceae6;
+  --text:#1a1a1a; --text2:#6b6b6b;
+  --border:rgba(0,0,0,0.12); --border2:rgba(0,0,0,0.22);
+  --blue:#185FA5; --bl:#E6F1FB; --bld:#0C447C;
+  --green:#1D9E75; --gl:#E1F5EE; --gld:#085041;
+  --amber:#BA7517; --al:#FAEEDA; --ald:#633806;
+  --purple:#7F77DD;
+  --r:8px; --rl:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e; --bg2:#2c2c2e; --bg3:#3a3a3c;
+  --text:#f2f2f7; --text2:#aeaeb2;
+  --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.22);
+  --bl:#0c2d4a; --bld:#85B7EB;
+  --gl:#0a2e22; --gld:#5DCAA5;
+  --al:#2e1f05; --ald:#FAC775;
+}}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:auto!important;overflow:visible!important}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:16px}
+.app{padding:.75rem;max-width:520px;margin:0 auto}
+
+/* En-tête */
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:8px}
+.hdr h1{font-size:18px;font-weight:600}
+.badge{font-size:10px;background:var(--bl);color:var(--bld);padding:3px 8px;border-radius:var(--r);white-space:nowrap;font-weight:600}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Statistiques en 4 colonnes */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem}
+.stat{background:var(--bg2);border-radius:var(--r);padding:8px 10px}
+.stat .v{font-size:18px;font-weight:600}
+.stat .l{font-size:10px;color:var(--text2);margin-top:1px}
+
+/* Sélecteur de table (bandeau défilant) */
+.tscroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem;scrollbar-width:none}
+.tscroll::-webkit-scrollbar{display:none}
+.tbtn{padding:8px 16px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer;font-size:14px;white-space:nowrap;position:relative;flex-shrink:0;min-height:42px;font-weight:500}
+.tbtn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tbtn .dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+/* Onglets (ex: Menu inclus / Boissons / Extras, ou Nouvelles / Préparation / Prêt) */
+.tabs{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 14px;border:1px solid transparent;border-radius:var(--r);font-size:13px;cursor:pointer;color:var(--text2);background:none;white-space:nowrap;min-height:36px;font-weight:500}
+.tab.active{border-color:var(--border2);color:var(--text);background:var(--bg2)}
+
+/* Carte générique */
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--rl);padding:1rem;margin-bottom:.875rem}
+.ctitle{font-size:14px;font-weight:600;margin-bottom:12px}
+.empty{text-align:center;padding:2rem;color:var(--text2);font-size:13px}
+.connecting{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
+
+/* Liste des commandes par convive (utilisée par Serveurs et Chef) */
+.olist{display:flex;flex-direction:column;gap:7px}
+.orow{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.ohdr{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg2);cursor:pointer}
+.gtag{min-width:30px;height:30px;border-radius:50%;background:var(--bl);color:var(--bld);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.gtag.paid{background:var(--gl);color:var(--gld)}
+.oname{flex:1;font-size:14px;font-weight:600}
+.otag{font-size:14px;font-weight:600;margin-right:4px}
+.pbadge{font-size:10px;background:var(--gl);color:var(--gld);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
+.sbadge{font-size:10px;background:var(--bl);color:var(--bld);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
+.ubadge{font-size:10px;background:var(--al);color:var(--ald);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
+.obody{padding:10px 12px;border-top:1px solid var(--border);display:none}
+.obody.open{display:block}
+.dline{font-size:13px;line-height:1.9}
+.dline .cat{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;margin-right:2px}
+.ssvc{margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.ssvc:last-child{border-bottom:none;margin-bottom:0}
+.nserv{margin-top:8px;padding:8px 10px;background:var(--bl);border-radius:var(--r);border:1px solid var(--blue)}
+.nserv .nt{font-size:12px;font-weight:700;color:var(--bld)}
+.nserv .nd{font-size:11px;color:var(--bld);margin-top:2px}
+.npay{margin-top:8px;padding:8px 10px;background:var(--gl);border-radius:var(--r);border:1px solid var(--green)}
+.npay .nt{font-size:12px;font-weight:700;color:var(--gld)}
+.npay .nd{font-size:11px;color:var(--gld);margin-top:2px}
+.oacts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.abtn{padding:8px 14px;border-radius:var(--r);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:var(--bg);color:var(--text);min-height:38px;font-weight:500}
+.abtn:active{transform:scale(.95)}
+.abtn.pay{background:var(--bg2);color:var(--text2);border-color:var(--border2)}
+.abtn.pay.done{background:var(--green);color:#fff;border-color:var(--green);font-weight:600}
+.abtn.unpay{background:var(--bg2);color:var(--text2)}
+.rnbadge{font-size:11px;background:var(--bg2);color:var(--text2);padding:2px 7px;border-radius:99px;margin-left:5px}
+.kbadge{font-size:10px;background:var(--gl);color:var(--gld);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:700}
+.kbadge-cooking{font-size:10px;background:var(--al);color:var(--ald);padding:3px 8px;border-radius:99px;white-space:nowrap;font-weight:600}
+.ttl{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg2);border-radius:var(--r);margin-top:10px}
+.ttl .tl{font-size:13px;color:var(--text2)}
+.ttl .tv{font-size:15px;font-weight:700}
+.expbtn{width:100%;margin-top:8px;padding:12px;background:var(--bg2);color:var(--text);border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;min-height:46px}
+
+/* Fenêtre modale (ex: réglage des prix, prise de poste serveur) */
+.mbg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--bg);border-radius:18px 18px 0 0;padding:1.5rem 1.25rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto}
+.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal h2{font-size:17px;font-weight:700}
+.mcls{background:var(--bg2);border:none;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center}
+.msave{width:100%;margin-top:16px;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;min-height:50px}
+.msave:disabled{opacity:.35;cursor:default}
